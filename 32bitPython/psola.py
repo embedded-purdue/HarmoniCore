@@ -107,7 +107,7 @@ def pitch_shift(audio, pitch, fmin, fmax, sample_rate, tmpdir):
     # Resynthesize
     return praat.call(manipulation, "Get resynthesis (overlap-add)").values[0]
 
-def vocode(audio,
+def psola(audio,
            sample_rate,
            target_pitch,
            fmin,

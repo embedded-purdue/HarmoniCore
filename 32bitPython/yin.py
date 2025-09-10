@@ -31,17 +31,13 @@ def autocorrelate(y, max_lag=None, axis=-1):
     
     if real:
         # For real-valued signals, use the real FFT for efficiency
-        # Step 1: Compute the real power spectrum (abs2)
         powspec = np.abs(scipy.fft.rfft(y, n=n_pad, axis=axis))**2
 
-        # Step 2: Convert back to the time domain using the real inverse FFT
         autocorr = scipy.fft.irfft(powspec, n=n_pad, axis=axis)
     else:
         # For complex signals, use the standard FFT
-        # Step 1: Compute the power spectrum (abs2)
         powspec = np.abs(scipy.fft.fft(y, n=n_pad, axis=axis))**2
 
-        # Step 2: Convert back to the time domain using the inverse FFT
         autocorr = scipy.fft.ifft(powspec, n=n_pad, axis=axis)
 
     # If the input was real, the output should also be real

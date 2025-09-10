@@ -14,7 +14,7 @@ import scipy
 import tempfile
 import os
 from yin import yin
-from vocode import vocode
+from psola import psola
 from parselmouth import Data, praat, Sound
 import soundfile
 
@@ -24,7 +24,7 @@ SEMITONES_IN_OCTAVE = 12
 # ----------------------
 # Hardcoded parameters
 # ----------------------
-VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/skyfall.wav"   # Path to your input file
+VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/travis.wav"   # Path to your input file
 PLOT_RESULTS = False                       # Whether to plot results
 CORRECTION_METHOD = "closest"               # "closest" or "scale"
 SCALE = "C:min"                           # Used only if CORRECTION_METHOD == "scale"
@@ -100,7 +100,7 @@ def autotune(audio, sr, correction_function, plot=False):
         plt.xlabel('Time [M:SS]')
         plt.savefig('pitch_correction.png', dpi=300, bbox_inches='tight')
 
-    return vocode(audio, sample_rate=int(sr),
+    return psola(audio, sample_rate=int(sr),
                         target_pitch=corrected_f0, fmin=fmin, fmax=fmax)
 
 def main():
