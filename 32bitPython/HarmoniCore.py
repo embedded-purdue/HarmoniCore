@@ -1,12 +1,10 @@
 from functools import partial
 from pathlib import Path
-import librosa
 import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 import soundfile as sf
 import scipy.signal as sig
-import psola
 from IPython.display import Audio
 from scipy.signal import get_window
 from numpy.lib.stride_tricks import as_strided
