@@ -1,20 +1,12 @@
 from functools import partial
 from pathlib import Path
-import librosa.display
+import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 import soundfile as sf
 import scipy.signal as sig
-from IPython.display import Audio
-from scipy.signal import get_window
-from numpy.lib.stride_tricks import as_strided
-import scipy
-import tempfile
-import os
 from yin import yin
 from psola import psola
-from parselmouth import Data, praat, Sound
-import soundfile
 
 
 SEMITONES_IN_OCTAVE = 12
@@ -74,7 +66,7 @@ def autotune(audio, sr, correction_function, plot=False):
     fmin = librosa.note_to_hz('C2')
     fmax = librosa.note_to_hz('C7')
 
-    f0 = librosa.yin(
+    f0 = yin(
         audio, frame_length=frame_length, hop_length=hop_length,
         sr=sr, fmin=fmin, fmax=fmax
     )

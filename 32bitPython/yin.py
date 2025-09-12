@@ -1,66 +1,128 @@
 import numpy as np
-def autocorrelate(y, max_lag=None, axis=-1):
+import scipy
+from numpy.lib.stride_tricks import as_strided
+
+def _localmin_sten(x):  # pragma: no cover
+    """Numba stencil for local minima computation"""
+    return (x[0] < x[-1]) & (x[0] <= x[1])
+
+def _localmin(x, y):  # pragma: no cover
+    """Vectorized wrapper for the localmin stencil"""
+    y[:] = _localmin_sten(x)
+
+def localmin(x: np.ndarray, *, axis: int = 0) -> np.ndarray:
+    """Find local minima in an array
+
+    An element ``x[i]`` is considered a local minimum if the following
+    conditions are met:
+
+    - ``x[i] < x[i-1]``
+    - ``x[i] <= x[i+1]``
+
+    Note that the first condition is strict, and that the first element
+    ``x[0]`` will never be considered as a local minimum.
+
+    Examples
+    --------
+    >>> x = np.array([1, 0, 1, 2, -1, 0, -2, 1])
+    >>> librosa.util.localmin(x)
+    array([False,  True, False, False,  True, False,  True, False])
+
+    >>> # Two-dimensional example
+    >>> x = np.array([[1,0,1], [2, -1, 0], [2, 1, 3]])
+    >>> librosa.util.localmin(x, axis=0)
+    array([[False, False, False],
+           [False,  True,  True],
+           [False, False, False]])
+
+    >>> librosa.util.localmin(x, axis=1)
+    array([[False,  True, False],
+           [False,  True, False],
+           [False,  True, False]])
+
+    Parameters
+    ----------
+    x : np.ndarray [shape=(d1,d2,...)]
+        input vector or array
+    axis : int
+        axis along which to compute local minimality
+
+    Returns
+    -------
+    m : np.ndarray [shape=x.shape, dtype=bool]
+        indicator array of local minimality along ``axis``
+
+    See Also
+    --------
+    localmax
     """
-    Computes the autocorrelation of a signal using the Fast Fourier Transform (FFT).
+    # Rotate the target axis to the end
+    xi = x.swapaxes(-1, axis)
 
-    This method is generally more efficient than direct correlation for long signals.
-    It computes the power spectrum of the signal in the frequency domain and then
-    converts it back to the time domain via an inverse FFT.
+    # Allocate the output array and rotate target axis
+    lmin = np.empty_like(x, dtype=bool)
+    lmini = lmin.swapaxes(-1, axis)
 
-    Parameters:
-    y (np.ndarray): The input array to autocorrelate.
-    max_lag (int, optional): The maximum lag to compute. If None,
-                             the full autocorrelation is computed.
-    axis (int): The axis along which to autocorrelate.
+    # Call the vectorized stencil
+    _localmin(xi, lmini)
+
+    # Handle the edge condition not covered by the stencil
+    lmini[..., -1] = xi[..., -1] < xi[..., -2]
+
+    return lmin
+
+def _pi_stencil(x: np.ndarray) -> np.ndarray:
+    """Stencil to compute local parabolic interpolation"""
+    a = x[1] + x[-1] - 2 * x[0]
+    b = (x[1] - x[-1]) / 2
+
+    # if np.abs(b) >= np.abs(a):
+    #     # If this happens, we'll shift by more than 1 bin
+    #     # Suppressing types because mypy has no idea about stencils
+    #     return 0  # type: ignore
+
+    return -b / a  # type: ignore
     
-    Returns:
-    np.ndarray: The truncated autocorrelation along the specified axis.
+def _pi_wrapper(x: np.ndarray, y: np.ndarray) -> None:  # pragma: no cover
+    """Vectorized wrapper for the parabolic interpolation stencil"""
+    y[:] = _pi_stencil(x)
+
+def _parabolic_interpolation(x: np.ndarray, *, axis: int = -2) -> np.ndarray:
+    """Piecewise parabolic interpolation for yin and pyin.
+
+    Parameters
+    ----------
+    x : np.ndarray
+        array to interpolate
+    axis : int
+        axis along which to interpolate
+
+    Returns
+    -------
+    parabolic_shifts : np.ndarray [shape=x.shape]
+        position of the parabola optima (relative to bin indices)
+
+        Note: the shift at bin `n` is determined as 0 if the estimated
+        optimum is outside the range `[n-1, n+1]`.
     """
-    # Ensure a valid maximum lag
-    if max_lag is None:
-        max_lag = y.shape[axis]
+    # Rotate the target axis to the end
+    xi = x.swapaxes(-1, axis)
 
-    max_lag = int(min(max_lag, y.shape[axis]))
-    
-    # Determine if the input signal is real or complex
-    real = not np.iscomplexobj(y)
+    # Allocate the output array and rotate target axis
+    shifts = np.empty_like(x)
+    shiftsi = shifts.swapaxes(-1, axis)
 
-    # Pad the signal to a "fast" FFT length to optimize performance
-    # The length must be at least 2*N - 1 for a full autocorrelation.
-    n_pad = scipy.fft.next_fast_len(2 * y.shape[axis] - 1, real=real)
-    
-    if real:
-        # For real-valued signals, use the real FFT for efficiency
-        powspec = np.abs(scipy.fft.rfft(y, n=n_pad, axis=axis))**2
+    # Call the vectorized stencil
+    _pi_wrapper(xi, shiftsi)
 
-        autocorr = scipy.fft.irfft(powspec, n=n_pad, axis=axis)
-    else:
-        # For complex signals, use the standard FFT
-        powspec = np.abs(scipy.fft.fft(y, n=n_pad, axis=axis))**2
+    # Handle the edge condition not covered by the stencil
+    shiftsi[..., -1] = 0
+    shiftsi[..., 0] = 0
 
-        autocorr = scipy.fft.ifft(powspec, n=n_pad, axis=axis)
+    return shifts
 
-    # If the input was real, the output should also be real
-    if real:
-        autocorr = np.real(autocorr)
-
-    # Step 3: Slice the result to the specified maximum lag
-    subslice = [slice(None)] * autocorr.ndim
-    subslice[axis] = slice(max_lag)
-
-    autocorr_slice = autocorr[tuple(subslice)]
-
-    # Step 4: Normalize by the zero-lag value (energy of the signal)
-    # The zero-lag value is always the first element of the autocorrelation array.
-    zero_lag_value = autocorr_slice.take(0, axis=axis)
-    autocorr_normalized = autocorr_slice / zero_lag_value
-
-    return autocorr_normalized
-    
-def expand_to(
-    x: np.ndarray, *, ndim: int, axes
-) -> np.ndarray:
-    """Expand the dimensions of an input array with
+def expand_to(x: np.ndarray, *, ndim: int, axes) -> np.ndarray:
+    """Expand the dimensions of an input array.
 
     Parameters
     ----------
@@ -82,34 +144,12 @@ def expand_to(
     See Also
     --------
     np.expand_dims
-
-    Examples
-    --------
-    Expand a 1d array into an (n, 1) shape
-
-    >>> x = np.arange(3)
-    >>> librosa.util.expand_to(x, ndim=2, axes=0)
-    array([[0],
-       [1],
-       [2]])
-
-    Expand a 1d array into a (1, n) shape
-
-    >>> librosa.util.expand_to(x, ndim=2, axes=1)
-    array([[0, 1, 2]])
-
-    Expand a 2d array into (1, n, m, 1) shape
-
-    >>> x = np.vander(np.arange(3))
-    >>> librosa.util.expand_to(x, ndim=4, axes=[1,2]).shape
-    (1, 3, 3, 1)
     """
     # Force axes into a tuple
-    axes_tup: Tuple[int]
     try:
-        axes_tup = tuple(axes)  # type: ignore
+        axes_tup = tuple(axes)
     except TypeError:
-        axes_tup = tuple([axes])  # type: ignore
+        axes_tup = (axes,)
 
     if len(axes_tup) != x.ndim:
         raise ParameterError(
@@ -121,11 +161,12 @@ def expand_to(
             f"Cannot expand x.shape={x.shape} to fewer dimensions ndim={ndim}"
         )
 
-    shape: List[int] = [1] * ndim
+    shape = [1] * ndim
     for i, axi in enumerate(axes_tup):
         shape[axi] = x.shape[i]
 
     return x.reshape(shape)
+
 
 def tiny(x):
     """Compute the tiny-value corresponding to an input's data type.
@@ -193,58 +234,10 @@ def tiny(x):
 
     return np.finfo(dtype).tiny
 
-def _pi_stencil(x: np.ndarray) -> np.ndarray:
-    """Stencil to compute local parabolic interpolation"""
-    a = x[1] + x[-1] - 2 * x[0]
-    b = (x[1] - x[-1]) / 2
-
-    # if np.abs(b) >= np.abs(a):
-    #     # If this happens, we'll shift by more than 1 bin
-    #     # Suppressing types because mypy has no idea about stencils
-    #     return 0  # type: ignore
-
-    return -b / a  # type: ignore
-    
-def _pi_wrapper(x: np.ndarray, y: np.ndarray) -> None:  # pragma: no cover
-    """Vectorized wrapper for the parabolic interpolation stencil"""
-    y[:] = _pi_stencil(x)
-    
-def _parabolic_interpolation(x: np.ndarray, *, axis: int = -2) -> np.ndarray:
-    """Piecewise parabolic interpolation for yin and pyin.
-
-    Parameters
-    ----------
-    x : np.ndarray
-        array to interpolate
-    axis : int
-        axis along which to interpolate
-
-    Returns
-    -------
-    parabolic_shifts : np.ndarray [shape=x.shape]
-        position of the parabola optima (relative to bin indices)
-
-        Note: the shift at bin `n` is determined as 0 if the estimated
-        optimum is outside the range `[n-1, n+1]`.
-    """
-    # Rotate the target axis to the end
-    xi = x.swapaxes(-1, axis)
-
-    # Allocate the output array and rotate target axis
-    shifts = np.empty_like(x)
-    shiftsi = shifts.swapaxes(-1, axis)
-
-    # Call the vectorized stencil
-    _pi_wrapper(xi, shiftsi)
-
-    # Handle the edge condition not covered by the stencil
-    shiftsi[..., -1] = 0
-    shiftsi[..., 0] = 0
-
-    return shifts
-
 def _cumulative_mean_normalized_difference(
     y_frames: np.ndarray,
+    frame_length: int,
+    win_length: int,
     min_period: int,
     max_period: int,
 ) -> np.ndarray:
@@ -258,6 +251,10 @@ def _cumulative_mean_normalized_difference(
     ----------
     y_frames : np.ndarray [shape=(frame_length, n_frames)]
         framed audio time series.
+    frame_length : int > 0 [scalar]
+        length of the frames in samples.
+    win_length : int > 0 [scalar]
+        length of the window for calculating autocorrelation in samples.
     min_period : int > 0 [scalar]
         minimum period.
     max_period : int > 0 [scalar]
@@ -268,101 +265,37 @@ def _cumulative_mean_normalized_difference(
     yin_frames : np.ndarray [shape=(max_period-min_period+1,n_frames)]
         Cumulative mean normalized difference function for each frame.
     """
-    acf_frames = autocorrelate(y_frames, max_lag=max_period + 1, axis=-2)
+    # Autocorrelation.
+    a = np.fft.rfft(y_frames, frame_length, axis=-2)
+    b = np.fft.rfft(y_frames[..., win_length:0:-1, :], frame_length, axis=-2)
+    acf_frames = np.fft.irfft(a * b, frame_length, axis=-2)[..., win_length:, :]
+    acf_frames[np.abs(acf_frames) < 1e-6] = 0
 
     # Energy terms.
-    yin_frames = np.square(y_frames)
-    np.cumsum(yin_frames, out=yin_frames, axis=-2)
-
-    # Difference function: d(k) = 2 * (ACF(0) - ACF(k)) - sum_{m=0}^{k-1} y(m)^2
-    k = slice(1, max_period + 1)
-    yin_frames[..., 0, :] = 0
-    yin_frames[..., k, :] = (
-        2 * (acf_frames[..., 0:1, :] - acf_frames[..., k, :]) - yin_frames[..., :k.stop-1, :]
+    energy_frames = np.cumsum(y_frames**2, axis=-2)
+    energy_frames = (
+        energy_frames[..., win_length:, :] - energy_frames[..., :-win_length, :]
     )
+    energy_frames[np.abs(energy_frames) < 1e-6] = 0
+
+    # Difference function.
+    yin_frames = energy_frames[..., :1, :] + energy_frames - 2 * acf_frames
 
     # Cumulative mean normalized difference function.
     yin_numerator = yin_frames[..., min_period : max_period + 1, :]
     # broadcast this shape to have leading ones
-    k_range = expand_to(np.r_[k], ndim=yin_frames.ndim, axes=-2)
+    tau_range = expand_to(
+        np.arange(1, max_period + 1), ndim=yin_frames.ndim, axes=-2
+    )
 
     cumulative_mean = (
-        np.cumsum(yin_frames[..., k, :], axis=-2) / k_range
+        np.cumsum(yin_frames[..., 1 : max_period + 1, :], axis=-2) / tau_range
     )
     yin_denominator = cumulative_mean[..., min_period - 1 : max_period, :]
     yin_frames: np.ndarray = yin_numerator / (
         yin_denominator + tiny(yin_denominator)
     )
     return yin_frames
-
-def _localmin_sten(x):  # pragma: no cover
-    """Numba stencil for local minima computation"""
-    return (x[0] < x[-1]) & (x[0] <= x[1])
-    
-def _localmin(x, y):  # pragma: no cover
-    """Vectorized wrapper for the localmin stencil"""
-    y[:] = _localmin_sten(x)
-
-def localmin(x: np.ndarray, *, axis: int = 0) -> np.ndarray:
-    """Find local minima in an array
-
-    An element ``x[i]`` is considered a local minimum if the following
-    conditions are met:
-
-    - ``x[i] < x[i-1]``
-    - ``x[i] <= x[i+1]``
-
-    Note that the first condition is strict, and that the first element
-    ``x[0]`` will never be considered as a local minimum.
-
-    Examples
-    --------
-    >>> x = np.array([1, 0, 1, 2, -1, 0, -2, 1])
-    >>> librosa.util.localmin(x)
-    array([False,  True, False, False,  True, False,  True, False])
-
-    >>> # Two-dimensional example
-    >>> x = np.array([[1,0,1], [2, -1, 0], [2, 1, 3]])
-    >>> librosa.util.localmin(x, axis=0)
-    array([[False, False, False],
-           [False,  True,  True],
-           [False, False, False]])
-
-    >>> librosa.util.localmin(x, axis=1)
-    array([[False,  True, False],
-           [False,  True, False],
-           [False,  True, False]])
-
-    Parameters
-    ----------
-    x : np.ndarray [shape=(d1,d2,...)]
-        input vector or array
-    axis : int
-        axis along which to compute local minimality
-
-    Returns
-    -------
-    m : np.ndarray [shape=x.shape, dtype=bool]
-        indicator array of local minimality along ``axis``
-
-    See Also
-    --------
-    localmax
-    """
-    # Rotate the target axis to the end
-    xi = x.swapaxes(-1, axis)
-
-    # Allocate the output array and rotate target axis
-    lmin = np.empty_like(x, dtype=bool)
-    lmini = lmin.swapaxes(-1, axis)
-
-    # Call the vectorized stencil
-    _localmin(xi, lmini)
-
-    # Handle the edge condition not covered by the stencil
-    lmini[..., -1] = xi[..., -1] < xi[..., -2]
-
-    return lmin
 
 def frame(
     x: np.ndarray,
@@ -529,79 +462,18 @@ def frame(
     slices[axis] = slice(0, None, hop_length)
     return xw[tuple(slices)]
 
-def valid_audio(y: np.ndarray) -> bool:
-    """Determine whether a variable contains valid audio data.
-
-    The following conditions must be satisfied:
-
-    - ``type(y)`` is ``np.ndarray``
-    - ``y.dtype`` is floating-point
-    - ``y.ndim != 0`` (must have at least one dimension)
-    - ``np.isfinite(y).all()`` samples must be all finite values
-
-    Parameters
-    ----------
-    y : np.ndarray
-        The input data to validate
-
-    Returns
-    -------
-    valid : bool
-        True if all tests pass
-
-    Raises
-    ------
-    ParameterError
-        In any of the conditions specified above fails
-
-    Notes
-    -----
-    This function caches at level 20.
-
-    Examples
-    --------
-    We can make an array that can be interpreted as an audio signal
-
-    >>> y = np.random.randn(5000)
-    >>> librosa.util.valid_audio(y)
-    True
-
-    If we insert a non-finite sample value somewhere, it will fail
-
-    >>> y[5] = np.nan
-    >>> librosa.util.valid_audio(y)
-    ...
-    ParameterError: Audio buffer is not finite everywhere
-
-    See Also
-    --------
-    numpy.float32
-    """
-    if not isinstance(y, np.ndarray):
-        raise ParameterError("Audio data must be of type numpy.ndarray")
-
-    if not np.issubdtype(y.dtype, np.floating):
-        raise ParameterError("Audio data must be floating-point")
-
-    if y.ndim == 0:
-        raise ParameterError(
-            f"Audio data must be at least one-dimensional, given y.shape={y.shape}"
-        )
-
-    if not np.isfinite(y).all():
-        raise ParameterError("Audio buffer is not finite everywhere")
-
-    return True
-
 def yin(
     y: np.ndarray,
+    *,
     fmin: float,
     fmax: float,
     sr: float = 22050,
     frame_length: int = 2048,
-    hop_length: int = None,
+    win_length = None,
+    hop_length = None,
+    trough_threshold: float = 0.1,
+    center: bool = True,
     pad_mode: str = "constant",
-    trough_threshold: float = 0.1
 ) -> np.ndarray:
     """Fundamental frequency (F0) estimation using the YIN algorithm.
 
@@ -620,51 +492,40 @@ def yin(
     ----------
     y : np.ndarray [shape=(..., n)]
         audio time series. Multi-channel is supported..
-
     fmin : number > 0 [scalar]
         minimum frequency in Hertz.
         The recommended minimum is ``librosa.note_to_hz('C2')`` (~65 Hz)
         though lower values may be feasible.
-
     fmax : number > fmin, <= sr/2 [scalar]
         maximum frequency in Hertz.
         The recommended maximum is ``librosa.note_to_hz('C7')`` (~2093 Hz)
         though higher values may be feasible.
-
     sr : number > 0 [scalar]
         sampling rate of ``y`` in Hertz.
-
     frame_length : int > 0 [scalar]
         length of the frames in samples.
         By default, ``frame_length=2048`` corresponds to a time scale of about 93 ms at
         a sampling rate of 22050 Hz.
-
+    win_length : None or int > 0 [scalar]
+        length of the window for calculating autocorrelation in samples.
+        If ``None``, defaults to ``frame_length // 2``
     hop_length : None or int > 0 [scalar]
         number of audio samples between adjacent YIN predictions.
         If ``None``, defaults to ``frame_length // 4``.
-
     trough_threshold : number > 0 [scalar]
         absolute threshold for peak estimation.
-
     center : boolean
         If ``True``, the signal `y` is padded so that frame
         ``D[:, t]`` is centered at `y[t * hop_length]`.
         If ``False``, then ``D[:, t]`` begins at ``y[t * hop_length]``.
         Defaults to ``True``,  which simplifies the alignment of ``D`` onto a
         time grid by means of ``librosa.core.frames_to_samples``.
-
     pad_mode : string or function
         If ``center=True``, this argument is passed to ``np.pad`` for padding
         the edges of the signal ``y``. By default (``pad_mode="constant"``),
         ``y`` is padded on both sides with zeros.
         If ``center=False``,  this argument is ignored.
         .. see also:: `np.pad`
-
-    win_length : Deprecated
-        length of the window for calculating autocorrelation in samples.
-
-        .. warning:: This parameter is deprecated as of 0.11.0 and
-            will be removed in 1.0.
 
     Returns
     -------
@@ -687,20 +548,29 @@ def yin(
     array([442.66354675, 441.95299983, 441.58010963, ...,
         871.161732  , 873.99001454, 877.04297681])
     """
+    # Set the default hop if it is not already specified.
+    if hop_length is None:
+        hop_length = frame_length // 4
 
-    # Check that audio is valid.
-    valid_audio(y)
+    if win_length is None:
+        win_length = frame_length // 2
+
+    # Pad the time series so that frames are centered
+    if center:
+        padding = [(0, 0)] * y.ndim
+        padding[-1] = (frame_length // 2, frame_length // 2)
+        y = np.pad(y, padding, mode=pad_mode)
 
     # Frame audio.
     y_frames = frame(y, frame_length=frame_length, hop_length=hop_length)
 
     # Calculate minimum and maximum periods
     min_period = int(np.floor(sr / fmax))
-    max_period = min(int(np.ceil(sr / fmin)), frame_length - 1)
+    max_period = min(int(np.ceil(sr / fmin)), frame_length - win_length - 1)
 
     # Calculate cumulative mean normalized difference function.
     yin_frames = _cumulative_mean_normalized_difference(
-        y_frames, min_period, max_period
+        y_frames, frame_length, win_length, min_period, max_period
     )
 
     # Parabolic interpolation.
