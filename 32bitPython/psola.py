@@ -1,12 +1,14 @@
 from parselmouth import Data, praat, Sound
-import soundfile
 import tempfile
 import numpy as np
 import os
+from scipy.io import wavfile
+import soundfile as sf
+
 
 def save(file, audio, sample_rate):
     """Save audio to disk"""
-    soundfile.write(file, audio, sample_rate)
+    sf.write(file, audio, sample_rate)
     
 def get_manipulation(audio, fmin, fmax, sample_rate, tmpdir):
     """Retrieve a praat manipulation context

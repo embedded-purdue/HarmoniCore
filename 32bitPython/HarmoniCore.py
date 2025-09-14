@@ -4,9 +4,12 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 import soundfile as sf
+from scipy.io import wavfile
 import scipy.signal as sig
 from yin import yin
 from psola import psola
+import pytsmod as tsm
+import noisereduce as nr
 
 
 SEMITONES_IN_OCTAVE = 12
@@ -14,10 +17,10 @@ SEMITONES_IN_OCTAVE = 12
 # ----------------------
 # Hardcoded parameters
 # ----------------------
-VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/nothingonyou.wav"   # Path to your input file
+VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/waterloo.wav"   # Path to your input file
 PLOT_RESULTS = False                       # Whether to plot results
 CORRECTION_METHOD = "scale"               # "closest" or "scale"
-SCALE = "A#:maj"                           # Used only if CORRECTION_METHOD == "scale"
+SCALE = "D:maj"                           # Used only if CORRECTION_METHOD == "scale"
 # ----------------------
 
 
@@ -91,7 +94,8 @@ def autotune(audio, sr, correction_function, plot=False):
         plt.savefig('pitch_correction.png', dpi=300, bbox_inches='tight')
 
     return psola(audio, sample_rate=int(sr),
-                        target_pitch=corrected_f0, fmin=fmin, fmax=fmax)
+                         target_pitch=corrected_f0, fmin=fmin, fmax=fmax)
+    # return tsm.tdpsola(audio, int(sr), f0, corrected_f0, 1, p_hop_size=hop_length, p_win_size=frame_length)
 
 def main():
     filepath = Path(VOCALS_FILE)
@@ -115,6 +119,11 @@ def main():
     outpath = filepath.parent / (filepath.stem + "_pitch_corrected" + filepath.suffix)
     sf.write(str(outpath), pitch_corrected_y, sr)
     print(f"Saved corrected audio to {outpath}")
+
+    reduced_noise = nr.reduce_noise(y=pitch_corrected_y, sr=sr)
+
+    # Save cleaned audio
+    sf.write("voice_cleaned.wav", reduced_noise, sr)
 
 if __name__=='__main__':
     main()
