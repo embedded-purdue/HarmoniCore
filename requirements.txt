@@ -3,3 +3,5 @@ numpy
 matplotlib
 scipy
 ipython
+praat-parselmouth
+pytsmod

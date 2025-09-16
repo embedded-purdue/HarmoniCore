@@ -9,7 +9,6 @@ import scipy.signal as sig
 from yin import yin
 from psola import psola
 import pytsmod as tsm
-import noisereduce as nr
 
 
 SEMITONES_IN_OCTAVE = 12
@@ -17,7 +16,7 @@ SEMITONES_IN_OCTAVE = 12
 # ----------------------
 # Hardcoded parameters
 # ----------------------
-VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/waterloo.wav"   # Path to your input file
+VOCALS_FILE = r"C:\Users\nsvp2\OneDrive\Desktop\HarmoniCore\wav\teenagefever.wav"   # Path to your input file
 PLOT_RESULTS = False                       # Whether to plot results
 CORRECTION_METHOD = "scale"               # "closest" or "scale"
 SCALE = "D:maj"                           # Used only if CORRECTION_METHOD == "scale"
@@ -120,10 +119,8 @@ def main():
     sf.write(str(outpath), pitch_corrected_y, sr)
     print(f"Saved corrected audio to {outpath}")
 
-    reduced_noise = nr.reduce_noise(y=pitch_corrected_y, sr=sr)
-
     # Save cleaned audio
-    sf.write("voice_cleaned.wav", reduced_noise, sr)
+    sf.write("voice_cleaned.wav", pitch_corrected_y, sr)
 
 if __name__=='__main__':
     main()
