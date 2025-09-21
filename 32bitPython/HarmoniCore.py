@@ -16,10 +16,10 @@ SEMITONES_IN_OCTAVE = 12
 # ----------------------
 # Hardcoded parameters
 # ----------------------
-VOCALS_FILE = r"C:\Users\nsvp2\OneDrive\Desktop\HarmoniCore\wav\teenagefever.wav"   # Path to your input file
+VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/nothingonyou.wav"   # Path to your input file
 PLOT_RESULTS = False                       # Whether to plot results
 CORRECTION_METHOD = "scale"               # "closest" or "scale"
-SCALE = "D:maj"                           # Used only if CORRECTION_METHOD == "scale"
+SCALE = "A#:maj"                           # Used only if CORRECTION_METHOD == "scale"
 # ----------------------
 
 
@@ -70,7 +70,7 @@ def autotune(audio, sr, correction_function, plot=False):
 
     f0 = yin(
         audio, frame_length=frame_length, hop_length=hop_length,
-        sr=sr, fmin=fmin, fmax=fmax
+        sr=sr, fmin=fmin, fmax=fmax, center=True
     )
 
     corrected_f0 = correction_function(f0)
@@ -120,6 +120,7 @@ def main():
     print(f"Saved corrected audio to {outpath}")
 
     # Save cleaned audio
+    print(pitch_corrected_y)
     sf.write("voice_cleaned.wav", pitch_corrected_y, sr)
 
 if __name__=='__main__':
