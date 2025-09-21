@@ -1,7 +1,7 @@
-module main#(
-    parameter int WIDTH;
-    parameter int THRESHOLD;
-    parameter int FRAME_LENGTH
+module main #(
+    parameter WIDTH;
+    parameter THRESHOLD;
+    parameter FRAME_LENGTH
 ) 
 (
     input logic clk, rst,
