@@ -16,7 +16,7 @@ SEMITONES_IN_OCTAVE = 12
 # ----------------------
 # Hardcoded parameters
 # ----------------------
-VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/nothingonyou.wav"   # Path to your input file
+VOCALS_FILE = "wav/nothingonyou.wav"   # Path to your input file
 PLOT_RESULTS = False                       # Whether to plot results
 CORRECTION_METHOD = "scale"               # "closest" or "scale"
 SCALE = "A#:maj"                           # Used only if CORRECTION_METHOD == "scale"

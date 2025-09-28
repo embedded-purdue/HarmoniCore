@@ -14,15 +14,6 @@ module main #(
     output logic trough,
     output logic min,
 ); 
-    always_ff @ (posedge clk) begin 
-        if (~n_rst) begin 
-            curr_yin <= 0;
-            prev_yin <= 0;
-        end else begin
-            curr_yin <= next_yin;
-            prev_yin <= curr_yin;
-        end
-    end
 
     logic [$clog2(FRAME_LENGTH)-1:0] count_out;
     logic frame_done;
@@ -41,6 +32,7 @@ module main #(
     .TROUGH_THRESHOLD(TROUGH_THRESHOLD),
     .MIN_PERIOD(MIN_PERIOD)) f_trough (.clk(clk),
     .n_rst(n_rst),
+    .frame_done(frame_done)
     .next_yin(next_yin),
     .count_out(count_out),
     .tau(tau),
