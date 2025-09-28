@@ -2,7 +2,7 @@ import librosa
 import numpy as np
 
 SEMITONES_IN_OCTAVE = 12
-VOCALS_FILE = "/Users/varunsv4/Documents/FPGA/HarmoniCore/wav/slide.wav"   # Path to your input file
+VOCALS_FILE = "C:/Users/priya/Vscode/Python Projects/HarmoniCore/wav/nothingonyou.wav"   # Path to your input file
 PLOT_RESULTS = False                       # Whether to plot results
 CORRECTION_METHOD = "scale"               # "closest" or "scale"
 SCALE = "D:min"                           # Used only if CORRECTION_METHOD == "scale"
