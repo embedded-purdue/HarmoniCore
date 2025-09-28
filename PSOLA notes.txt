@@ -1,0 +1,15 @@
+PSOLA notes
+- Pitch-Synchronous Overlap-Add
+- Change the fundamental frequency of a speaker's voice without changing other qualities (only changing pitch, not the more personal parts of a person singing like timbre)
+- PSOLA is also able to do speech synthesis (TTS) and voice conversion
+- Uses STFT, which is DTFT/FFT over small chunks of the signal at a time (window), because normal DTFT
+	- For STFT, multiply a window function in while taking the DFT of a signal
+
+How PSOLA works
+1. Find Pitch periods or Pitch Epochs
+	- This can be done by looking at peaks in the speech waveform
+	- Or you can use FFT to find fundamental freq. then infer epochs
+	- These mark the start and stop of one pitch period
+2. Once we find the pitch period, we can stretch/squeeze it by a factor x to make longer/shorter periods which result in lower/higher pitch
+3. Once we have these pitch periods, we can create a "new" audio file, but we must window them so they blend smoothly
+4. 
