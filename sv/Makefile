@@ -4,7 +4,9 @@ setup:
 clean:
 	rm -rf *.wdb *.jou *.log *.pb *.str
 %.sim:
-	xvlog -sv ./src/*.sv ./tb/$*_tb.sv
+	for %%f in (src\*.sv) do xvlog -sv %%f
+	xvlog -sv ./tb/$*_tb.sv
+	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
 	xelab -debug typical $*_tb -s $*_sim
 	xsim $*_sim -gui -view ./waves/$*_sim.wcfg
 Template.sim:

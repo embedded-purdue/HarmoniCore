@@ -7,7 +7,6 @@ package types;
 
     parameter DW = 18;
     parameter FFT_DW = DW;
-    parameter LEFTOVER = ROUNDBITS - FFT_DW;
     parameter MAX_VAL = (1 <<< (FFT_DW-1)) - 1;
     parameter MIN_VAL = -(1 <<< (FFT_DW-1));
     parameter DECIMALBITS = 11;

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="FFTwrapper_sim.wdb" id="1">
+         <top_modules>
+            <top_module name="FFTwrapper_tb" />
+            <top_module name="vcomponents" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="84,995 ps"></ZoomStartTime>
+      <ZoomEndTime time="85,002 ps"></ZoomEndTime>
+      <Cursor1Time time="85,000 ps"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="340"></NameColumnWidth>
+      <ValueColumnWidth column_width="155"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="20" />
+   <wvobject fp_name="/FFTwrapper_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/nrst" type="logic">
+      <obj_property name="ElementShortName">nrst</obj_property>
+      <obj_property name="ObjectShortName">nrst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/ifft" type="logic">
+      <obj_property name="ElementShortName">ifft</obj_property>
+      <obj_property name="ObjectShortName">ifft</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/ifft_en" type="logic">
+      <obj_property name="ElementShortName">ifft_en</obj_property>
+      <obj_property name="ObjectShortName">ifft_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/in_en" type="logic">
+      <obj_property name="ElementShortName">in_en</obj_property>
+      <obj_property name="ObjectShortName">in_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/in_last" type="logic">
+      <obj_property name="ElementShortName">in_last</obj_property>
+      <obj_property name="ObjectShortName">in_last</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/out_en" type="logic">
+      <obj_property name="ElementShortName">out_en</obj_property>
+      <obj_property name="ObjectShortName">out_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/blk_exp_en" type="logic">
+      <obj_property name="ElementShortName">blk_exp_en</obj_property>
+      <obj_property name="ObjectShortName">blk_exp_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/in_real" type="array">
+      <obj_property name="ElementShortName">in_real[17:0]</obj_property>
+      <obj_property name="ObjectShortName">in_real[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/in_im" type="array">
+      <obj_property name="ElementShortName">in_im[17:0]</obj_property>
+      <obj_property name="ObjectShortName">in_im[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/ifft_ready" type="logic">
+      <obj_property name="ElementShortName">ifft_ready</obj_property>
+      <obj_property name="ObjectShortName">ifft_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/in_ready" type="logic">
+      <obj_property name="ElementShortName">in_ready</obj_property>
+      <obj_property name="ObjectShortName">in_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/out_valid" type="logic">
+      <obj_property name="ElementShortName">out_valid</obj_property>
+      <obj_property name="ObjectShortName">out_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/out_last" type="logic">
+      <obj_property name="ElementShortName">out_last</obj_property>
+      <obj_property name="ObjectShortName">out_last</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/blk_exp_valid" type="logic">
+      <obj_property name="ElementShortName">blk_exp_valid</obj_property>
+      <obj_property name="ObjectShortName">blk_exp_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/out_real" type="array">
+      <obj_property name="ElementShortName">out_real[17:0]</obj_property>
+      <obj_property name="ObjectShortName">out_real[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/out_im" type="array">
+      <obj_property name="ElementShortName">out_im[17:0]</obj_property>
+      <obj_property name="ObjectShortName">out_im[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/xk_index" type="array">
+      <obj_property name="ElementShortName">xk_index[15:0]</obj_property>
+      <obj_property name="ObjectShortName">xk_index[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/blk_exp" type="array">
+      <obj_property name="ElementShortName">blk_exp[7:0]</obj_property>
+      <obj_property name="ObjectShortName">blk_exp[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/FFTwrapper_tb/afcif/blk_exp_sample" type="array">
+      <obj_property name="ElementShortName">blk_exp_sample[7:0]</obj_property>
+      <obj_property name="ObjectShortName">blk_exp_sample[7:0]</obj_property>
+   </wvobject>
+</wave_config>

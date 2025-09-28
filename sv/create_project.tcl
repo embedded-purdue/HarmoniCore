@@ -1,5 +1,5 @@
 # Set up a new project
-create_project HarmoniCore ./ -part xc7k160tffg676-1 -force
+create_project HarmoniCore ./ -part xc7a25tcsg325-2 -force
 #create_project AFC ./ -part xc7k325tffg900-2 -force
 
 set_property SIMULATOR_LANGUAGE Verilog [current_project]

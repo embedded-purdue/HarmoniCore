@@ -12,11 +12,11 @@ module FFTwrapper (
     logic [7 : 0] s_axis_config_tdata;
     logic s_axis_config_tvalid;
     logic s_axis_config_tready;
-    logic [(ROUNDBITS*2)-1: 0] s_axis_data_tdata;
+    logic [47: 0] s_axis_data_tdata;
     logic s_axis_data_tvalid;
     logic s_axis_data_tready;
     logic s_axis_data_tlast;
-    logic [(ROUNDBITS*2)-1: 0] m_axis_data_tdata;
+    logic [47: 0] m_axis_data_tdata;
     logic [23 : 0] m_axis_data_tuser;
     logic m_axis_data_tvalid;
     logic m_axis_data_tready;
@@ -62,14 +62,14 @@ module FFTwrapper (
         s_axis_config_tdata = {7'b0, (~fftif.ifft)};
         s_axis_config_tvalid = fftif.ifft_en;
         fftif.ifft_ready = s_axis_config_tready;
-        s_axis_data_tdata = {{LEFTOVER{1'b0}}, fftif.in_im, {LEFTOVER{1'b0}}, fftif.in_real};
+        s_axis_data_tdata = {6'b0, fftif.in_im, 6'b0, fftif.in_real};
         s_axis_data_tvalid = fftif.in_en;
         fftif.in_ready = s_axis_data_tready;
         s_axis_data_tlast = fftif.in_last;
 
 
         //{LEFTOVER{1'b0}, fftif.out_im, LEFTOVER{1'b0}, fftif.out_real} = m_axis_data_tdata;
-        fftif.out_im = m_axis_data_tdata[FFT_DW+ROUNDBITS-1:ROUNDBITS];
+        fftif.out_im = m_axis_data_tdata[18+24-1:24];
         fftif.out_real = m_axis_data_tdata[FFT_DW-1:0];
         {fftif.blk_exp_sample, fftif.xk_index} = m_axis_data_tuser;
         fftif.out_valid = m_axis_data_tvalid;
