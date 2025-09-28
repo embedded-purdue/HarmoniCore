@@ -21,16 +21,16 @@ module counter #(
 )
 (
     input  logic clk,
-    input  logic rst,
-    output logic [FRAME_LENGTH-1:0] count_out,
+    input  logic n_rst,
+    output logic [$clog2(FRAME_LENGTH)-1:0] count_out,
     output logic frame_done
 );
 
-    logic [FRAME_LENGTH-1:0] next_count;
+    logic [$clog2(FRAME_LENGTH)-1:0] next_count;
     logic next_frame_done;
 
-    always_ff @(posedge clk or posedge rst) begin 
-        if (rst) begin
+    always_ff @(posedge clk) begin 
+        if (~n_rst) begin
             count_out <= '0;
             frame_done <= 1'b0;
         end else begin
