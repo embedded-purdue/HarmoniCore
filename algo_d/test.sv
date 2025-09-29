@@ -1,8 +1,8 @@
 module main #(
-    parameter WIDTH;
-    parameter THRESHOLD;
-    parameter FRAME_LENGTH
-    parameter MIN_PERIOD;
+    parameter WIDTH,
+    parameter THRESHOLD,
+    parameter FRAME_LENGTH,
+    parameter MIN_PERIOD
 ) 
 (
     input logic clk, 
@@ -12,7 +12,7 @@ module main #(
     output logic [WIDTH-1:0] prev_yin, 
     output logic [WIDTH-1:0] curr_yin,
     output logic trough,
-    output logic min,
+    output logic min
 ); 
 
     logic [$clog2(FRAME_LENGTH)-1:0] count_out;
@@ -29,10 +29,10 @@ module main #(
 
     find_trough #(.WIDTH(WIDTH),
     .FRAME_LENGTH(FRAME_LENGTH),
-    .TROUGH_THRESHOLD(TROUGH_THRESHOLD),
+    .TROUGH_THRESHOLD(THRESHOLD),
     .MIN_PERIOD(MIN_PERIOD)) f_trough (.clk(clk),
     .n_rst(n_rst),
-    .frame_done(frame_done)
+    .frame_done(frame_done),
     .next_yin(next_yin),
     .count_out(count_out),
     .tau(tau),
@@ -85,7 +85,7 @@ module find_trough #(
 )(
     input logic clk, n_rst, frame_done, // or rst
     input logic [WIDTH-1:0] next_yin,
-    input logic [$clog2(FRAME_LENGTH)-1:0], count_out,
+    input logic [$clog2(FRAME_LENGTH)-1:0] count_out,
     output logic [WIDTH-1:0] tau,        // not sure how big the width will be
     output logic [WIDTH-1:0] idx,
     output logic trough_found
@@ -94,7 +94,9 @@ module find_trough #(
     logic [WIDTH-1:0] next_tau;
     logic [WIDTH-1:0] prev_yin, curr_yin;
     logic [WIDTH-1:0] min, next_min, smallest_min, next_smallest_min;
+    logic [WIDTH-1:0] min_index, next_min_index;
     logic [$clog2(FRAME_LENGTH)-1:0] trough, next_trough;
+    logic next_trough_found;
 
     always_ff @(posedge clk) begin : Controller
         if (~n_rst) begin    // or rst 
@@ -104,16 +106,16 @@ module find_trough #(
 
             smallest_min <= 10;  // some large value
 
-            tau          <= 0
+            tau          <= 0;
             curr_yin     <= 0;
             prev_yin     <= 0;
 
         end
         else begin
             trough       <= next_trough;
-            trough_found <= next_trough_found
+            trough_found <= next_trough_found;
             
-            smallest_min <= next_smallest_min
+            smallest_min <= next_smallest_min;
             min_index    <= next_min_index;
 
             curr_yin     <= next_yin;
@@ -130,7 +132,7 @@ module find_trough #(
         next_min = min; 
         next_smallest_min = smallest_min;
         // check that curr_yin is a trough and is less than the threshold
-        if ((curr_yin < prev_yin) & (curr_yin <= next_yin) & (curr_yin < threshold) & (~trough_found)) begin
+        if ((curr_yin < prev_yin) & (curr_yin <= next_yin) & (curr_yin < TROUGH_THRESHOLD) & (~trough_found)) begin
             next_trough = count_out - 1;        // count_out - 1 because count_out is the next_yin index
             next_trough_found = 1'b1;           // we found trough, set flag high
 

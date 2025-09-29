@@ -1,0 +1,4 @@
+{
+    "verilog.linting.slang.arguments": "C:\\Xilinx\\2025.1\\Vivado\\bin",
+    "verilog.linting.linter": "xvlog"
+}
