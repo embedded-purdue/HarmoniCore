@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 `timescale 1ns/1ps
 
 `ifndef ALGOC_IF
