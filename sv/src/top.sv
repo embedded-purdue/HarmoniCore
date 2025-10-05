@@ -17,7 +17,7 @@ module top (
     // Counter Instantiation
     logic [17:0] count;
     logic rollover_flag;
-    flex_counter #(.SIZE(18)) counter_inst (.clk(clk), .n_rst(nRST), .clear(1'b0), .count_enable(cif.count_enable),
+    counter #(.SIZE(18)) counter_inst (.clk(clk), .n_rst(nRST), .clear(1'b0), .count_enable(cif.count_enable),
         .rollover_val(MAX_PERIOD), .count_out(count), .rollover_flag(rollover_flag));
 
     // DUAL PORT INSTANTIATION: STILL NEED TO DO
