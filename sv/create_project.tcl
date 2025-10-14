@@ -21,6 +21,29 @@ set_property CONFIG.Output_Ordering natural_order [get_ips fft_core]
 set_property CONFIG.Implementation_Options radix_2_burst_io [get_ips fft_core]
 generate_target all [get_ips fft_core]
 
+##################################################################
+# CREATE IP div
+##################################################################
+
+set div [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div]
+
+# User Parameters
+set_property -dict [list \
+  CONFIG.ACLKEN {false} \
+  CONFIG.ARESETN {false} \
+  CONFIG.dividend_and_quotient_width {18} \
+  CONFIG.divisor_width {18} \
+  CONFIG.fractional_width {18} \
+  CONFIG.latency {22} \
+] [get_ips div]
+
+# Runtime Parameters
+set_property -dict { 
+  GENERATE_SYNTH_CHECKPOINT {1}
+} $div
+
+##################################################################
+
 add_files constraints.xdc
 set_property FILE_TYPE XDC [get_files constraints.xdc]
 set_property top AFC [current_fileset] 
