@@ -1,6 +1,6 @@
 
 `timescale 1ns / 1ps
-`include "types.sv"
+`include "../include/types.sv"
 
 module cumsum 
 import types::*;

@@ -41,6 +41,29 @@ set_property -dict [list \
 set_property -dict { 
   GENERATE_SYNTH_CHECKPOINT {1}
 } $div
+generate_target all [get_ips div]
+
+##################################################################
+
+##################################################################
+# CREATE IP blk_mem
+##################################################################
+
+set blk_mem [create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name blk_mem]
+
+# User Parameters
+set_property -dict [list \
+  CONFIG.Assume_Synchronous_Clk {true} \
+  CONFIG.Memory_Type {True_Dual_Port_RAM} \
+  CONFIG.Write_Depth_A {11} \
+  CONFIG.Write_Width_A {18} \
+] [get_ips blk_mem]
+
+# Runtime Parameters
+set_property -dict { 
+  GENERATE_SYNTH_CHECKPOINT {1}
+} $blk_mem
+generate_target all [get_ips blk_mem]
 
 ##################################################################
 
