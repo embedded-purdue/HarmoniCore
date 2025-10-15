@@ -2,7 +2,7 @@
 `timescale 1ns / 1ps
 `include "../include/types.sv"
 
-module cmnd_step4_tb;
+module cmnd_tb;
 
     parameter PERIOD = 10;
     logic clk = 1, nRST;

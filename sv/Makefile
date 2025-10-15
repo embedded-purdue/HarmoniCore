@@ -8,7 +8,8 @@ clean:
 	xvlog -sv ./tb/$*_tb.sv
 	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
 	xvhdl ./HarmoniCore.gen/sources_1/ip/div/sim/div.vhd
-	xvhdl ./HarmoniCore.gen/sources_1/ip/blk_mem/sim/blk_mem.v
+	xvlog ./HarmoniCore.gen/sources_1/ip/blk_mem/simulation/blk_mem_gen_v8_4.v
+	xvlog ./HarmoniCore.gen/sources_1/ip/blk_mem/sim/blk_mem.v
 	xelab -debug typical $*_tb -s $*_sim
 	xsim $*_sim -gui -view ./waves/$*_sim.wcfg
 Template.sim:

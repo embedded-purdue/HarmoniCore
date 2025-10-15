@@ -19,11 +19,11 @@ import types::*;
     logic [DW-1:0] count;
     logic rollover_flag;
     counter #(.SIZE(18)) counter_inst (.clk(clk), .n_rst(nRST), .clear(1'b0), .count_enable(cmndif.diff_valid), .rollover_val(MAX_PERIOD),
-                                       .count_out(count), .rollover_flag(rollover_flag));
+                                       .count(count), .flag(rollover_flag));
     
     // Diff Shift Register Instantiation
     logic [DW-1:0] delayed_diff;
-    shift_reg #(.LATENCY(23)) shift_inst (.clk(clk), .n_rst(nRST), .shift_en(1'b1), .serial_in(cmndif.diff_in),
+    shift_reg #(.LATENCY(23)) shift_inst (.clk(clk), .nRST(nRST), .shift_en(1'b1), .serial_in(cmndif.diff_in),
                                           .serial_out(delayed_diff));
 
     // Div and Memory Block Instantiation
