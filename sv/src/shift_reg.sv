@@ -12,11 +12,11 @@ module shift_reg #(
     input logic [DW-1:0] serial_in,
     output logic [DW-1:0] serial_out
 );
-    logic [DW-1:0] shift [0:LATENCY-1];
+    logic [DW-1:0] shift [LATENCY-1:0];
 
     always_ff @(posedge clk, negedge nRST) begin : shiftLogic
         if (~nRST)         shift <= '{default: '0};
-        else if (shift_en) shift <= {shift[LATENCY-1:1], serial_in};
+        else if (shift_en) shift <= {shift[LATENCY-2:0], serial_in};
     end
 
     assign serial_out = shift[LATENCY-1];

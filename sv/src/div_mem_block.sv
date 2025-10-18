@@ -14,7 +14,7 @@ import types::*;
     output logic [17:0] final_out
 );
     // DIV OUTPUT
-    logic [DW-1:0] result_data;
+    logic [47:0] result_data;
     logic result_valid;
 
     // DETERMINE WHAT TO SEND INTO DIV
@@ -65,7 +65,7 @@ import types::*;
             b_wr = 1'b0;
         end
         else if (result_valid) begin // write data
-            a_in = result_data;
+            a_in = result_data[DW-1:0];
             b_in = delayed_diff;
             a_addr = sp_w - 8;
             b_addr = sp_w - 4;
@@ -91,7 +91,7 @@ import types::*;
     );
 
     // DIV INPUT (COUNT/TOTAL or MEM)
-    logic [DW-1:0] dividend_data, divisor_data;
+    logic [23:0] dividend_data, divisor_data; // aligns 18 to the nearest byte
     logic dividend_valid, divisor_valid;
     always_ff @(posedge clk, negedge nRST) begin : divInput
         if(~nRST) begin
@@ -103,14 +103,14 @@ import types::*;
         else if (divFlag) begin
             dividend_valid <= 1'b1;
             divisor_valid <= 1'b1;
-            dividend_data <= a_out;
-            divisor_data <= b_out;
+            dividend_data <= {'0, a_out};
+            divisor_data <= {'0, b_out};
         end
         else if (count >= MIN_VAL - 1) begin
             dividend_valid <= 1'b1;
             divisor_valid <= 1'b1;
-            dividend_data <= total;
-            divisor_data <= count;
+            dividend_data <= {'0, total};
+            divisor_data <= {'0, count};
         end
     end
 
@@ -128,7 +128,7 @@ import types::*;
     // ASSIGN FINAL OUTPUT
     always_ff @(posedge clk, negedge nRST) begin : yinvalLogic
         if (~nRST)                        final_out <= '0;
-        else if (memFlag && result_valid) final_out <= result_data;
+        else if (memFlag && result_valid) final_out <= result_data[DW-1:0];
     end
 
 endmodule

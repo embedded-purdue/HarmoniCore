@@ -40,7 +40,7 @@ import types::*;
             repeat (20) @(negedge clk);
 
             $display("=================================");
-            assert (tbif.yinval == expYinVal) $display ("Correct yin value");
+            assert (tbif.yin_val == expYinVal) $display ("Correct yin value");
                 else $display ("Incorrect yin value ERROR");
             $display("");
 
