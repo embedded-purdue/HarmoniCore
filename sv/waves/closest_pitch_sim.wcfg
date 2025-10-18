@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="closest_pitch_sim.wdb" id="1">
+         <top_modules>
+            <top_module name="closest_pitch_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1,770.497 ns"></ZoomStartTime>
+      <ZoomEndTime time="2,558.498 ns"></ZoomEndTime>
+      <Cursor1Time time="2,260.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="190"></NameColumnWidth>
+      <ValueColumnWidth column_width="144"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="5" />
+   <wvobject fp_name="/closest_pitch_tb/test_num" type="array">
+      <obj_property name="ElementShortName">test_num[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_num[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/closest_pitch_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/closest_pitch_tb/nrst" type="logic">
+      <obj_property name="ElementShortName">nrst</obj_property>
+      <obj_property name="ObjectShortName">nrst</obj_property>
+   </wvobject>
+   <wvobject fp_name="group11" type="group">
+      <obj_property name="label">Interface Signals</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/closest_pitch_tb/test_name" type="array">
+         <obj_property name="ElementShortName">test_name[0:49][31:0]</obj_property>
+         <obj_property name="ObjectShortName">test_name[0:49][31:0]</obj_property>
+         <obj_property name="Radix">ASCIIRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/cpif/freq_in" type="array">
+         <obj_property name="ElementShortName">freq_in[17:0]</obj_property>
+         <obj_property name="ObjectShortName">freq_in[17:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/cpif/scale" type="array">
+         <obj_property name="ElementShortName">scale[7:0]</obj_property>
+         <obj_property name="ObjectShortName">scale[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/cpif/active_tones" type="array">
+         <obj_property name="ElementShortName">active_tones[11:0]</obj_property>
+         <obj_property name="ObjectShortName">active_tones[11:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/cpif/pitch_addr" type="array">
+         <obj_property name="ElementShortName">pitch_addr[5:0]</obj_property>
+         <obj_property name="ObjectShortName">pitch_addr[5:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/cpif/start" type="logic">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/cpif/done" type="logic">
+         <obj_property name="ElementShortName">done</obj_property>
+         <obj_property name="ObjectShortName">done</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group19" type="group">
+      <obj_property name="label">Internal Signals</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/closest_pitch_tb/DUT/note_freqs" type="array">
+         <obj_property name="ElementShortName">note_freqs[0:59][31:0]</obj_property>
+         <obj_property name="ObjectShortName">note_freqs[0:59][31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/DUT/state" type="array">
+         <obj_property name="ElementShortName">state[1:0]</obj_property>
+         <obj_property name="ObjectShortName">state[1:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/DUT/target_freq" type="array">
+         <obj_property name="ElementShortName">target_freq[31:0]</obj_property>
+         <obj_property name="ObjectShortName">target_freq[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/DUT/best_diff" type="array">
+         <obj_property name="ElementShortName">best_diff[31:0]</obj_property>
+         <obj_property name="ObjectShortName">best_diff[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/DUT/diff" type="array">
+         <obj_property name="ElementShortName">diff[31:0]</obj_property>
+         <obj_property name="ObjectShortName">diff[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/DUT/best_idx" type="array">
+         <obj_property name="ElementShortName">best_idx[31:0]</obj_property>
+         <obj_property name="ObjectShortName">best_idx[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/closest_pitch_tb/DUT/i" type="array">
+         <obj_property name="ElementShortName">i[31:0]</obj_property>
+         <obj_property name="ObjectShortName">i[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>
