@@ -1,35 +1,35 @@
-module main #(
-    parameter WIDTH,
-    parameter THRESHOLD,
-    parameter FRAME_LENGTH,
+module top #(
+    parameter DW,
+    parameter TROUGH_THRESHOLD,
+    parameter FRAME_LEN,
     parameter MIN_PERIOD
 ) 
 (
     input logic clk, 
     input logic n_rst,
-    input logic [WIDTH-1:0] next_yin,
+    input logic [DW-1:0] next_yin,
     input logic next_idx,
-    output logic [WIDTH-1:0] prev_yin, 
-    output logic [WIDTH-1:0] curr_yin,
+    output logic [DW-1:0] prev_yin, 
+    output logic [DW-1:0] curr_yin,
     output logic trough,
     output logic min
 ); 
 
-    logic [$clog2(FRAME_LENGTH)-1:0] count_out;
+    logic [$clog2(FRAME_LEN)-1:0] count_out;
     logic frame_done;
     
-    counter #(.FRAME_LENGTH(FRAME_LENGTH)) count (.clk(clk),
+    counter #(.FRAME_LEN(FRAME_LEN)) count (.clk(clk),
         .n_rst(n_rst),
         .count_out(count_out),
         .frame_done(frame_done)
     );
 
-    logic [WIDTH-1:0] tau, idx;
+    logic [DW-1:0] tau, idx;
     logic trough_found;
 
-    find_trough #(.WIDTH(WIDTH),
-    .FRAME_LENGTH(FRAME_LENGTH),
-    .TROUGH_THRESHOLD(THRESHOLD),
+    find_trough #(.DW(DW),
+    .FRAME_LEN(FRAME_LEN),
+    .TROUGH_TROUGH_THRESHOLD(TROUGH_THRESHOLD),
     .MIN_PERIOD(MIN_PERIOD)) f_trough (.clk(clk),
     .n_rst(n_rst),
     .frame_done(frame_done),
@@ -42,16 +42,16 @@ module main #(
 endmodule
 
 module counter #(
-    parameter FRAME_LENGTH // integer not bit
+    parameter FRAME_LEN // integer not bit
 )
 (
     input  logic clk,
     input  logic n_rst,
-    output logic [$clog2(FRAME_LENGTH)-1:0] count_out, 
+    output logic [$clog2(FRAME_LEN)-1:0] count_out, 
     output logic frame_done
 );
 
-    logic [$clog2(FRAME_LENGTH)-1:0] next_count;
+    logic [$clog2(FRAME_LEN)-1:0] next_count;
     logic next_frame_done;
 
     always_ff @(posedge clk) begin 
@@ -65,7 +65,7 @@ module counter #(
     end
 
     always_comb begin 
-        if (count_out == FRAME_LENGTH) begin
+        if (count_out == FRAME_LEN) begin
             next_count        = '0;
             next_frame_done   = 1'b1;
         end else begin
@@ -78,24 +78,24 @@ endmodule
 
 
 module find_trough #(
-    parameter WIDTH,
-    parameter FRAME_LENGTH,
-    parameter TROUGH_THRESHOLD,
+    parameter DW,
+    parameter FRAME_LEN,
+    parameter TROUGH_TROUGH_THRESHOLD,
     parameter MIN_PERIOD
 )(
     input logic clk, n_rst, frame_done, // or rst
-    input logic [WIDTH-1:0] next_yin,
-    input logic [$clog2(FRAME_LENGTH)-1:0] count_out,
-    output logic [WIDTH-1:0] tau,        // not sure how big the width will be
-    output logic [WIDTH-1:0] idx,
+    input logic [DW-1:0] next_yin,
+    input logic [$clog2(FRAME_LEN)-1:0] count_out,
+    output logic [DW-1:0] tau,        // not sure how big the DW will be
+    output logic [DW-1:0] idx,
     output logic trough_found
 );
 
-    logic [WIDTH-1:0] next_tau;
-    logic [WIDTH-1:0] prev_yin, curr_yin;
-    logic [WIDTH-1:0] min, next_min, smallest_min, next_smallest_min;
-    logic [WIDTH-1:0] min_index, next_min_index;
-    logic [$clog2(FRAME_LENGTH)-1:0] trough, next_trough;
+    logic [DW-1:0] next_tau;
+    logic [DW-1:0] prev_yin, curr_yin;
+    logic [DW-1:0] min, next_min, smallest_min, next_smallest_min;
+    logic [DW-1:0] min_index, next_min_index;
+    logic [$clog2(FRAME_LEN)-1:0] trough, next_trough;
     logic next_trough_found;
 
     always_ff @(posedge clk) begin : Controller
@@ -131,8 +131,8 @@ module find_trough #(
         next_trough = trough;
         next_min = min; 
         next_smallest_min = smallest_min;
-        // check that curr_yin is a trough and is less than the threshold
-        if ((curr_yin < prev_yin) & (curr_yin <= next_yin) & (curr_yin < TROUGH_THRESHOLD) & (~trough_found)) begin
+        // check that curr_yin is a trough and is less than the TROUGH_THRESHOLD
+        if ((curr_yin < prev_yin) & (curr_yin <= next_yin) & (curr_yin < TROUGH_TROUGH_THRESHOLD) & (~trough_found)) begin
             next_trough = count_out - 1;        // count_out - 1 because count_out is the next_yin index
             next_trough_found = 1'b1;           // we found trough, set flag high
 
