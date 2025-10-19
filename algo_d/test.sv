@@ -157,5 +157,18 @@ module find_trough #(
 
     assign idx = tau - MIN_PERIOD;  // give to interpolation 
 
+endmodule
 
+module parabolic_interp(input logic [WIDTH-1:0] prev_yin, next_yin, curr_yin, output logic [WIDTH-1:0] out);
+    logic [WIDTH-1:0] denom; 
+        assign denom = prev_yin + next_yin - 2 * curr_yin; 
+        
+        if (next_trough == 0 || next_trough >= FRAME_LENGTH - 1) begin 
+            out = 0; 
+        end
+        if (denom < 2'b11) begin 
+            out = 0; 
+        end else begin
+            out = (prev_yin - next_yin) >> 2 / denom;
+        end
 endmodule
