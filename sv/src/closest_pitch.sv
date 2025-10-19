@@ -58,19 +58,18 @@ module closest_pitch #(
     // FSM: Linear scan search
     // ------------------------------------------------------------
     typedef enum logic [1:0] {IDLE, SCAN, FINALIZE, DONE} state_t;
-    state_t state;
+    state_t state, nxt_state;
 
     logic [31:0] target_freq;
-    logic [31:0] best_diff, diff;
-    int   best_idx;
-    int   i;
+    logic [31:0] best_diff, diff, nxt_diff;
+    int   best_idx, nxt_best;
+    int   i, nxt_i;
+    logic [PITCH_ADDRESS_BITS - 1:0] nxt_pitch;
+    logic nxt_done;
 
     // Compute scaled target frequency
     assign target_freq = cpif.freq_in << cpif.scale;
 
-    // ------------------------------------------------------------
-    // Sequential FSM
-    // ------------------------------------------------------------
     always_ff @(posedge clk, negedge nRST) begin
         if (!nRST) begin
             state           <= IDLE;
@@ -80,47 +79,121 @@ module closest_pitch #(
             best_diff       <= 32'hFFFFFFFF;
             i               <= 0;
         end else begin
-            case (state)
-                IDLE: begin
-                    cpif.done <= 0;
-                    if (cpif.start) begin
-                        best_diff <= 32'hFFFFFFFF;
-                        best_idx  <= 0;
-                        i         <= 0;
-                        state     <= SCAN;
-                    end
-                end
-
-                SCAN: begin
-                    if (cpif.active_tones[i % 12]) begin
-                        diff = (target_freq > note_freqs[i]) ?
-                               (target_freq - note_freqs[i]) :
-                               (note_freqs[i] - target_freq);
-                        if (diff < best_diff) begin
-                            best_diff <= diff;
-                            best_idx  <= i;
-                        end
-                    end
-
-                    if (i == NUM_NOTES-1) begin
-                        state           <= FINALIZE;
-                    end else begin
-                        i <= i + 1;
-                    end
-                end
-
-                FINALIZE: begin
-                    cpif.pitch_addr <= best_idx[PITCH_ADRESS_BITS:0];
-                    cpif.done       <= 1;
-                    state           <= DONE;
-                end
-
-                DONE: begin
-                    if (!cpif.start)
-                        state <= IDLE;
-                end
-            endcase
+            state           <= nxt_state;
+            cpif.pitch_addr <= nxt_pitch;
+            cpif.done       <= nxt_done;
+            best_idx        <= nxt_best;
+            best_diff       <= nxt_diff;
+            i               <= nxt_i;
         end
     end
+
+    always_comb 
+    begin
+        nxt_state = state;
+        nxt_pitch = cpif.pitch_addr;
+        nxt_done = cpif.done;
+        nxt_best = best_idx;
+        nxt_diff = best_diff;
+        nxt_i = i;
+
+        case (state)
+            IDLE: begin
+                nxt_done = 0;
+                if (cpif.start) begin
+                    nxt_diff = 32'hFFFFFFFF;
+                    nxt_best = 0;
+                    nxt_i = 0;
+                    nxt_state = SCAN;
+                end
+            end
+            SCAN: begin
+                if (cpif.active_tones[i % 12]) begin
+                    diff = (target_freq > note_freqs[i]) ?
+                            (target_freq - note_freqs[i]) :
+                            (note_freqs[i] - target_freq);
+                    if (diff < best_diff) begin
+                        nxt_diff = diff;
+                        nxt_best = i;
+                    end
+                end
+
+                if (i == NUM_NOTES-1) begin
+                    nxt_state = FINALIZE;
+                end else begin
+                    nxt_i = i + 1;
+                end
+            end
+
+            FINALIZE: begin
+                    nxt_pitch = best_idx[PITCH_ADDRESS_BITS:0];
+                    nxt_done = 1;
+                    nxt_state = DONE;
+                end
+
+            DONE: begin
+                if (!cpif.start)
+                    nxt_state = IDLE;
+            end
+        endcase
+
+    end
+
+    
+
+    // ------------------------------------------------------------
+    // Sequential FSM
+    // ------------------------------------------------------------
+    // always_ff @(posedge clk, negedge nRST) begin
+    //     if (!nRST) begin
+    //         state           <= IDLE;
+    //         cpif.pitch_addr <= 0;
+    //         cpif.done       <= 0;
+    //         best_idx        <= 0;
+    //         best_diff       <= 32'hFFFFFFFF;
+    //         i               <= 0;
+    //     end else begin
+    //         case (state)
+    //             IDLE: begin
+    //                 cpif.done <= 0;
+    //                 if (cpif.start) begin
+    //                     best_diff <= 32'hFFFFFFFF;
+    //                     best_idx  <= 0;
+    //                     i         <= 0;
+    //                     state     <= SCAN;
+    //                 end
+    //             end
+
+    //             SCAN: begin
+    //                 if (cpif.active_tones[i % 12]) begin
+    //                     diff = (target_freq > note_freqs[i]) ?
+    //                            (target_freq - note_freqs[i]) :
+    //                            (note_freqs[i] - target_freq);
+    //                     if (diff < best_diff) begin
+    //                         best_diff <= diff;
+    //                         best_idx  <= i;
+    //                     end
+    //                 end
+
+    //                 if (i == NUM_NOTES-1) begin
+    //                     state           <= FINALIZE;
+    //                 end else begin
+    //                     i <= i + 1;
+    //                 end
+    //             end
+
+    //             FINALIZE: begin
+    //                 cpif.pitch_addr <= best_idx[PITCH_ADRESS_BITS:0];
+    //                 cpif.done       <= 1;
+    //                 state           <= DONE;
+    //             end
+
+    //             DONE: begin
+    //                 if (!cpif.start)
+    //                     state <= IDLE;
+    //             end
+    //         endcase
+    //     end
+    // end
 
 endmodule

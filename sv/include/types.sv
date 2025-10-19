@@ -18,7 +18,7 @@ package types;
     parameter TROUGH_THRESHOLD = 0.1;
     parameter FMIN = 65.41; //C2
     parameter FMAX = 2093; //C7
-    parameter PITCH_ADRESS_BITS = 6;
+    parameter PITCH_ADDRESS_BITS = 6;
     parameter BLOCK_SCALE = 8;
     parameter START_OCTAVE = 2;
     parameter END_OCTAVE = 6;
