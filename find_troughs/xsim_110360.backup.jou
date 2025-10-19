@@ -3,8 +3,8 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Sun Oct 19 11:21:29 2025
-# Process ID         : 39424
+# Start of session at: Sun Oct 19 13:17:23 2025
+# Process ID         : 110360
 # Current directory  : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/find_troughs
 # Command line       : xsim.exe -source {xsim.dir/top_tb/xsim_script.tcl}
 # Log file           : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/find_troughs/xsim.log
@@ -19,7 +19,7 @@
 # Host memory        : 68424 MB
 # Swap memory        : 4294 MB
 # Total Virtual      : 72719 MB
-# Available Virtual  : 43013 MB
+# Available Virtual  : 46710 MB
 #-----------------------------------------------------------
 start_gui
 source xsim.dir/top_tb/xsim_script.tcl

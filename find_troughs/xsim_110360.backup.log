@@ -3,8 +3,8 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Sun Oct 19 11:21:29 2025
-# Process ID         : 39424
+# Start of session at: Sun Oct 19 13:17:23 2025
+# Process ID         : 110360
 # Current directory  : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/find_troughs
 # Command line       : xsim.exe -source {xsim.dir/top_tb/xsim_script.tcl}
 # Log file           : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/find_troughs/xsim.log
@@ -19,7 +19,7 @@
 # Host memory        : 68424 MB
 # Swap memory        : 4294 MB
 # Total Virtual      : 72719 MB
-# Available Virtual  : 43013 MB
+# Available Virtual  : 46710 MB
 #-----------------------------------------------------------
 start_gui
 source xsim.dir/top_tb/xsim_script.tcl
@@ -114,7 +114,7 @@ WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 avail
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1/Vivado/data/ip'.
-current_fileset: Time (s): cpu = 00:00:27 ; elapsed = 00:00:13 . Memory (MB): peak = 1545.855 ; gain = 123.180
+current_fileset: Time (s): cpu = 00:00:29 ; elapsed = 00:00:13 . Memory (MB): peak = 1526.594 ; gain = 97.801
 # xsim {top_tb} -autoloadwcfg
 Time resolution is 1 ps
 create_wave_config; add_wave /; set_property needs_save false [current_wave_config]
@@ -2067,6 +2067,65 @@ Trough found at time 20505000! curr_yin = 123821, prev_yin = 120885
 Trough found at time 20515000! curr_yin = 123821, prev_yin = 123821
 Trough found at time 20525000! curr_yin = 126271, prev_yin = 123821
 Trough found at time 20535000! curr_yin = 126271, prev_yin = 126271
+Trough found at time 20545000! curr_yin = 128225, prev_yin = 126271
+Trough found at time 20555000! curr_yin = 128225, prev_yin = 128225
+Trough found at time 20565000! curr_yin = 129675, prev_yin = 128225
+Trough found at time 20575000! curr_yin = 129675, prev_yin = 129675
+Trough found at time 20585000! curr_yin = 130615, prev_yin = 129675
+Trough found at time 20595000! curr_yin = 130615, prev_yin = 130615
+Trough found at time 20605000! curr_yin = 131043, prev_yin = 130615
+Trough found at time 20615000! curr_yin = 131043, prev_yin = 131043
+Trough found at time 20625000! curr_yin = 130956, prev_yin = 131043
+Trough found at time 20635000! curr_yin = 130956, prev_yin = 130956
+Trough found at time 20645000! curr_yin = 130354, prev_yin = 130956
+Trough found at time 20655000! curr_yin = 130354, prev_yin = 130354
+Trough found at time 20665000! curr_yin = 129240, prev_yin = 130354
+Trough found at time 20675000! curr_yin = 129240, prev_yin = 129240
+Trough found at time 20685000! curr_yin = 127618, prev_yin = 129240
+Trough found at time 20695000! curr_yin = 127618, prev_yin = 127618
+Trough found at time 20705000! curr_yin = 125495, prev_yin = 127618
+Trough found at time 20715000! curr_yin = 125495, prev_yin = 125495
+Trough found at time 20725000! curr_yin = 122879, prev_yin = 125495
+Trough found at time 20735000! curr_yin = 122879, prev_yin = 122879
+Trough found at time 20745000! curr_yin = 119780, prev_yin = 122879
+Trough found at time 20755000! curr_yin = 119780, prev_yin = 119780
+Trough found at time 20765000! curr_yin = 116211, prev_yin = 119780
+Trough found at time 20775000! curr_yin = 116211, prev_yin = 116211
+Trough found at time 20785000! curr_yin = 112185, prev_yin = 116211
+Trough found at time 20795000! curr_yin = 112185, prev_yin = 112185
+Trough found at time 20805000! curr_yin = 107718, prev_yin = 112185
+Trough found at time 20815000! curr_yin = 107718, prev_yin = 107718
+Trough found at time 20825000! curr_yin = 102828, prev_yin = 107718
+Trough found at time 20835000! curr_yin = 102828, prev_yin = 102828
+Trough found at time 20845000! curr_yin =  97534, prev_yin = 102828
+Trough found at time 20855000! curr_yin =  97534, prev_yin =  97534
+Trough found at time 20865000! curr_yin =  91857, prev_yin =  97534
+Trough found at time 20875000! curr_yin =  91857, prev_yin =  91857
+Trough found at time 20885000! curr_yin =  85819, prev_yin =  91857
+Trough found at time 20895000! curr_yin =  85819, prev_yin =  85819
+Trough found at time 20905000! curr_yin =  79444, prev_yin =  85819
+Trough found at time 20915000! curr_yin =  79444, prev_yin =  79444
+Trough found at time 20925000! curr_yin =  72757, prev_yin =  79444
+Trough found at time 20935000! curr_yin =  72757, prev_yin =  72757
+Trough found at time 20945000! curr_yin =  65784, prev_yin =  72757
+Trough found at time 20955000! curr_yin =  65784, prev_yin =  65784
+Trough found at time 20965000! curr_yin =  58553, prev_yin =  65784
+Trough found at time 20975000! curr_yin =  58553, prev_yin =  58553
+Trough found at time 20985000! curr_yin =  51091, prev_yin =  58553
+Trough found at time 20995000! curr_yin =  51091, prev_yin =  51091
+Trough found at time 21005000! curr_yin =  43429, prev_yin =  51091
+Trough found at time 21015000! curr_yin =  43429, prev_yin =  43429
+Trough found at time 21025000! curr_yin =  35596, prev_yin =  43429
+Trough found at time 21035000! curr_yin =  35596, prev_yin =  35596
+Trough found at time 21045000! curr_yin =  27624, prev_yin =  35596
+Trough found at time 21055000! curr_yin =  27624, prev_yin =  27624
+Trough found at time 21065000! curr_yin =  19542, prev_yin =  27624
+Trough found at time 21075000! curr_yin =  19542, prev_yin =  19542
+Trough found at time 21085000! curr_yin =  11384, prev_yin =  19542
+Trough found at time 21095000! curr_yin =  11384, prev_yin =  11384
+Trough found at time 21105000! curr_yin =   3182, prev_yin =  11384
+Trough found at time 21115000! curr_yin =   3182, prev_yin =   3182
+Trough found at time 21125000! curr_yin = 257110, prev_yin =   3182
 Trough found at time 21135000! curr_yin = 257110, prev_yin = 257110
 Trough found at time 21145000! curr_yin = 248915, prev_yin = 257110
 Trough found at time 21155000! curr_yin = 248915, prev_yin = 248915
@@ -4057,9 +4116,29 @@ Trough found at time 40995000! curr_yin =  67719, prev_yin =  67719
 Finished generating sine wave at time 41005000
 Trough found at time 41005000! curr_yin =  60555, prev_yin =  67719
 Trough found at time 41015000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41025000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41035000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41045000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41055000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41065000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41075000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41085000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41095000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41105000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41115000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41125000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41135000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41145000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41155000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41165000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41175000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41185000! curr_yin =  60555, prev_yin =  60555
+Trough found at time 41195000! curr_yin =  60555, prev_yin =  60555
 Testbench finished at time 41205000
-$finish called at time : 41205 ns : File "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/find_troughs/tb/top_tb.sv" Line 68
+First trough: 254865
+Overall min: 131073
+$finish called at time : 41205 ns : File "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/find_troughs/tb/top_tb.sv" Line 74
 close_sim
 INFO: [Simtcl 6-16] Simulation closed
 exit
-INFO: [Common 17-206] Exiting xsim at Sun Oct 19 11:34:18 2025...
+INFO: [Common 17-206] Exiting xsim at Sun Oct 19 13:21:58 2025...

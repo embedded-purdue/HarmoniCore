@@ -22,20 +22,8 @@ all: sim
 
 # Target to run the simulation for your 'top' module
 sim:
-	# Step 1: Source the Vivado environment settings script to set up paths.
-	# This ensures all subsequent commands can be found.
-	source C:/Xilinx/2025.1/Vivado/settings64.sh && \
-	\
-	# Step 2: Compile all SystemVerilog files with xvlog.
-	# The order is critical: package first, then the design, then the testbench.
 	xvlog -sv src/types.sv src/top.sv tb/top_tb.sv && \
-	\
-	# Step 3: Elaborate the design using the testbench as the top level.
-	# The top module in your tb is 'top_tb'.
-	# We create a simulation snapshot also named 'top_tb'.
 	xelab -debug typical top_tb -s top_tb && \
-	\
-	# Step 4: Run the simulation on the snapshot and open the GUI.
 	xsim top_tb -gui
 
 # A 'clean' target to remove generated simulation files
