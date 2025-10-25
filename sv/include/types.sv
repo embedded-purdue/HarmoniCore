@@ -22,6 +22,11 @@ package types;
     parameter BLOCK_SCALE = 8;
     parameter START_OCTAVE = 2;
     parameter END_OCTAVE = 6;
+    parameter int BASE_FREQS_C4 [0:11] = '{
+        535718, 567969, 601268, 637601,
+        675942, 715850, 757310, 803840,
+        850534, 901120, 954908, 1011962
+    };
 
 endpackage
 
