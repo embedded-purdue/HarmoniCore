@@ -38,3 +38,9 @@ FFTwrapper:
 	xvhdl HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd && \
 	xelab -debug typical FFTwrapper_tb -s FFTwrapper_tb && \
 	xsim FFTwrapper_tb -gui -view waves/FFTwrapper_sim.wcfg
+
+sim:
+	xvlog -sv include/types.sv src/find_trough.sv tb/find_trough_tb.sv && \
+	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
+	xelab -debug typical find_trough_tb -s find_trough_tb && \
+	xsim find_trough_tb -gui -view ./waves/find_trough_sim.wcfg
