@@ -1,0 +1,73 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Sun Oct 26 12:57:43 2025
+# Process ID         : 27356
+# Current directory  : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv
+# Command line       : vivado.exe -mode batch -source create_project.tcl
+# Log file           : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/vivado.log
+# Journal file       : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv\vivado.jou
+# Running On         : LAPTOP-ECVP0FVU
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 22000
+# Processor Detail   : AMD Ryzen 7 5800H with Radeon Graphics         
+# CPU Frequency      : 3194 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 17024 MB
+# Swap memory        : 14495 MB
+# Total Virtual      : 31520 MB
+# Available Virtual  : 15887 MB
+#-----------------------------------------------------------
+source create_project.tcl
+# create_project HarmoniCore ./ -part xc7a25tcsg325-2 -force
+create_project: Time (s): cpu = 00:00:29 ; elapsed = 00:00:20 . Memory (MB): peak = 530.383 ; gain = 249.227
+# set_property SIMULATOR_LANGUAGE Verilog [current_project]
+# set FFT_DW 18
+# set FFT_LEN 1024
+# create_ip -name xfft -vendor xilinx.com -library ip -version 9.1 -module_name fft_core
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinix/2025.1/Vivado/data/ip'.
+create_ip: Time (s): cpu = 00:00:08 ; elapsed = 00:00:10 . Memory (MB): peak = 579.148 ; gain = 48.766
+# set_property CONFIG.channels 1 [get_ips fft_core]
+# set_property CONFIG.transform_length $FFT_LEN [get_ips fft_core]
+# set_property CONFIG.target_clock_frequency 250 [get_ips fft_core]
+# set_property CONFIG.target_data_throughput 1 [get_ips fft_core]
+# set_property CONFIG.phase_factor_width 16 [get_ips fft_core]
+# set_property CONFIG.scaling_options Block_Floating_Point [get_ips fft_core]
+# set_property CONFIG.aresetn true [get_ips fft_core]
+# set_property CONFIG.xk_index true [get_ips fft_core]
+# set_property CONFIG.Input_Width $FFT_DW [get_ips fft_core]
+# set_property CONFIG.Cyclic_Prefix_Insertion false [get_ips fft_core]
+# set_property CONFIG.Output_Ordering natural_order [get_ips fft_core]
+# set_property CONFIG.Implementation_Options radix_2_burst_io [get_ips fft_core]
+# generate_target all [get_ips fft_core]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'fft_core'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fft_core'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'fft_core'...
+INFO: [IP_Flow 19-1686] Generating 'C Simulation' target for IP 'fft_core'...
+INFO: [IP_Flow 19-1686] Generating 'Test Bench' target for IP 'fft_core'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'fft_core'...
+# add_files constraints.xdc
+# set_property FILE_TYPE XDC [get_files constraints.xdc]
+# set_property top AFC [current_fileset] 
+# set include_path "./include"
+# foreach file [glob -directory $include_path *] {
+#      add_files $file    
+# }
+# set src_path "./src"
+# foreach file [glob -directory $src_path *] {
+#      add_files $file    
+# }
+# set tb_path "./tb"
+# foreach file [glob -directory $tb_path *] {
+#      add_files $file    
+# }
+# set wav_path "./waves"
+# foreach file [glob -directory $wav_path *] {
+#      add_files $file    
+# }
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 26 12:58:28 2025...

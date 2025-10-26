@@ -15,10 +15,11 @@ package types;
     parameter FRAME_LEN = 2048;
     parameter HOP_LEN = FRAME_LEN / 4;
     parameter WIN_LEN = FRAME_LEN / 2;
-    parameter TROUGH_THRESHOLD = 0.1;
+    // parameter TROUGH_THRESHOLD = 0.1;
     parameter FMIN = 65.41; //C2
     parameter FMAX = 2093; //C7
-
+    parameter MIN_PERIOD = 21;       // floor (44100 / 2093.004522404789) [SR / fmax]
+    parameter TROUGH_THRESHOLD = 10000;
 endpackage
 
 `endif 
