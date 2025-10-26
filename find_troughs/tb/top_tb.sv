@@ -8,7 +8,6 @@ module top_tb;
     logic clk;
     logic n_rst;
     logic [DW-1:0] next_yin;
-    logic next_idx;
     logic [DW-1:0] prev_yin;
     logic [DW-1:0] curr_yin;
     logic trough_found_out;
@@ -20,7 +19,6 @@ module top_tb;
         .clk(clk),
         .n_rst(n_rst),
         .next_yin(next_yin),
-        .next_idx(next_idx),
         .prev_yin(prev_yin),
         .curr_yin(curr_yin),
         .trough_found_out(trough_found_out),
@@ -30,7 +28,12 @@ module top_tb;
     );
 
     localparam CLK_PERIOD = 10;
-    always #(CLK_PERIOD / 2) clk = ~clk;
+    // always #(CLK_PERIOD / 2) clk = ~clk;
+
+    initial begin
+        clk = 0;
+        forever #(CLK_PERIOD / 2) clk = ~clk;
+    end
 
 
     initial begin
@@ -41,10 +44,9 @@ module top_tb;
         $display("Starting Testbench for 'top' module");
         
         // initialize signals
-        clk = 0;
+        // clk = 0;
         n_rst = 0; 
         next_yin = 0;
-        next_idx = 0;
 
         // deassert reset after a few cycles
         #(CLK_PERIOD * 5);
@@ -59,9 +61,7 @@ module top_tb;
             phase = 2 * 3.14159 * test_freq * (real'(i) / real'(DR));
             next_yin = integer'(scale_factor * $sin(phase));
             
-            next_idx = 1;
             @(posedge clk);
-            next_idx = 0;
         end
         
         $display("Finished generating sine wave at time %0t", $time);

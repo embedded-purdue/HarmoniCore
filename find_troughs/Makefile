@@ -22,7 +22,7 @@ all: sim
 
 # Target to run the simulation for your 'top' module
 sim:
-	xvlog -sv src/types.sv src/top.sv tb/top_tb.sv && \
+	xvlog -sv include/types.sv src/top.sv tb/top_tb.sv && \
 	xelab -debug typical top_tb -s top_tb && \
 	xsim top_tb -gui
 
@@ -34,7 +34,7 @@ clean:
 .PHONY: all sim clean
 
 cft:
-	xvlog -sv src/types.sv src/top.sv tb/top_tb.sv
+	xvlog -sv include/types.sv src/top.sv tb/top_tb.sv
 
 dft:
 	xelab -debug typical top_tb -s top_tb

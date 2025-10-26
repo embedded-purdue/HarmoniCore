@@ -11,7 +11,6 @@ module top #(
     input logic clk,
     input logic n_rst,
     input logic signed [DW-1:0] next_yin,
-    input logic next_idx,
     output logic signed [DW-1:0] prev_yin,
     output logic signed [DW-1:0] curr_yin,
     output logic trough_found_out,
@@ -64,7 +63,7 @@ module counter #(
     logic [$clog2(FRAME_LEN)-1:0] next_count;
     logic next_frame_done;
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk or negedge n_rst) begin
         if (~n_rst) begin
             count_out  <= '0;
             frame_done <= 1'b0;
@@ -116,7 +115,7 @@ module find_trough #(
     localparam signed [DW-1:0] MAX_VAL = (1 << (DW-2)) - 1;
     logic [$clog2(MIN_PERIOD):0] period_counter, next_period_counter;
 
-    always_ff @(posedge clk) begin : Controller
+    always_ff @(posedge clk or negedge n_rst) begin : Controller
         if (~n_rst) begin
             min_index         <= '0;
             trough_index      <= '0;
@@ -162,7 +161,7 @@ module find_trough #(
             next_trough_index     = count_out - 1;
             next_trough_found     = 1'b1;
             next_period_counter   = MIN_PERIOD;
-            next_first_trough     = curr_yin; // Latch the first trough's value
+            next_first_trough     = count_out - 1; // Latch the first trough's value
         end
 
         // --- Always search for the overall minimum value ---
