@@ -1,4 +1,4 @@
-//clone repo
+// OLD CODE | NOT USED
 
 module fsm1 #(
     parameter DATA_WIDTH = 18

@@ -1,3 +1,5 @@
+// OLD CODE | NOT USED
+
 module fsm2 #(
     parameter DATA_WIDTH = 18
 )(

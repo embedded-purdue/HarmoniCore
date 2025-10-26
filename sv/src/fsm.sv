@@ -83,44 +83,117 @@ always_comb begin
     read_b2   = 1'b0;
     read_b3   = 1'b0;
     read_b4   = 1'b0;
+    write_b1  = 1'b0;
+    write_b2  = 1'b0;
+    write_b3  = 1'b0;
+    write_b4  = 1'b0;
     clear     = 1'b0;
 
     case(current_state)
 
         IDLE: begin
             clear = 1'b1;
+
+            read_en   = 1'b0;
+            count_en  = 1'b0;
+            read_b1   = 1'b0;
+            read_b2   = 1'b0;
+            read_b3   = 1'b0;
+            read_b4   = 1'b0;
+            write_b1  = 1'b0;
+            write_b2  = 1'b0;
+            write_b3  = 1'b0;
+            write_b4  = 1'b0;
         end
 
         READ: begin
             read_en = 1'b1;
             write_b1 = 1'b1;
+
+            count_en  = 1'b0;
+            read_b1   = 1'b0;
+            read_b2   = 1'b0;
+            read_b3   = 1'b0;
+            read_b4   = 1'b0;
+            write_b2  = 1'b0;
+            write_b3  = 1'b0;
+            write_b4  = 1'b0;
+            clear     = 1'b0;
         end
         
         READ_B4: begin
             count_en = 1'b1;
             read_b4  = 1'b1;
+
+            read_en   = 1'b0;
+            read_b1   = 1'b0;
+            read_b2   = 1'b0;
+            read_b3   = 1'b0;
+            write_b1  = 1'b0;
+            write_b2  = 1'b0;
+            write_b3  = 1'b0;
+            write_b4  = 1'b0;
+            clear     = 1'b0;
         end
 // Note: Are we using a counter to read from fifo??? Do inputs come in fast enough?
         READ_B3: begin
             count_en = 1'b1;
             read_b3  = 1'b1;
             write_b4 = 1'b1;
+
+            read_en   = 1'b0;
+            read_b1   = 1'b0;
+            read_b2   = 1'b0;
+            read_b4   = 1'b0;
+            write_b1  = 1'b0;
+            write_b2  = 1'b0;
+            write_b3  = 1'b0;
+            clear     = 1'b0;
         end
         
         READ_B2: begin
             count_en = 1'b1;
             read_b2  = 1'b1;
             write_b3 = 1'b1;
+
+            read_en   = 1'b0;
+            read_b1   = 1'b0;
+            read_b3   = 1'b0;
+            read_b4   = 1'b0;
+            write_b1  = 1'b0;
+            write_b2  = 1'b0;
+            write_b4  = 1'b0;
+            clear     = 1'b0;
         end
 
         READ_B1: begin
             count_en = 1'b1;
             read_b1  = 1'b1;
             write_b2 = 1'b1;
+
+            read_en   = 1'b0;
+            read_b2   = 1'b0;
+            read_b3   = 1'b0;
+            read_b4   = 1'b0;
+            write_b1  = 1'b0;
+            write_b3  = 1'b0;
+            write_b4  = 1'b0;
+            clear     = 1'b0;
         end
 
         default: begin
             clear = 1'b1;
+
+            read_en   = 1'b0;
+            count_en  = 1'b0;
+            read_b1   = 1'b0;
+            read_b2   = 1'b0;
+            read_b3   = 1'b0;
+            read_b4   = 1'b0;
+            write_b1  = 1'b0;
+            write_b2  = 1'b0;
+            write_b3  = 1'b0;
+            write_b4  = 1'b0;
         end
 
     endcase
