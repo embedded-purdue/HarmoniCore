@@ -2,11 +2,11 @@
 setup:
 	vivado -mode batch -source create_project.tcl
 clean:
-	rm -rf *.wdb *.jou *.log *.pb *.str
+	del -rf *.wdb *.jou *.log *.pb *.str
 %.sim:
 	for %%f in (src\*.sv) do xvlog -sv %%f
 	xvlog -sv ./tb/$*_tb.sv
-	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
+	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd ./HarmoniCore.gen/sources_1/ip/div_gen_0/sim/div_gen_0.vhd
 	xelab -debug typical $*_tb -s $*_sim
 	xsim $*_sim -gui -view ./waves/$*_sim.wcfg
 Template.sim:

@@ -3,10 +3,10 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Sun Oct 26 12:57:43 2025
-# Process ID         : 27356
+# Start of session at: Sun Oct 26 14:17:32 2025
+# Process ID         : 22700
 # Current directory  : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv
-# Command line       : vivado.exe -mode batch -source create_project.tcl
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent7152 D:\School\Fall 2025\ESAP\Hcore\HarmoniCore\sv\HarmoniCore.xpr
 # Log file           : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/vivado.log
 # Journal file       : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv\vivado.jou
 # Running On         : LAPTOP-ECVP0FVU
@@ -19,6 +19,24 @@
 # Host memory        : 17024 MB
 # Swap memory        : 14495 MB
 # Total Virtual      : 31520 MB
-# Available Virtual  : 15887 MB
+# Available Virtual  : 15233 MB
 #-----------------------------------------------------------
-source create_project.tcl
+start_gui
+open_project {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.xpr}
+update_compile_order -fileset sources_1
+create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name blk_mem_gen_0
+set_property -dict [list \
+  CONFIG.Assume_Synchronous_Clk {true} \
+  CONFIG.Memory_Type {True_Dual_Port_RAM} \
+  CONFIG.Write_Depth_A {12} \
+  CONFIG.Write_Width_A {18} \
+] [get_ips blk_mem_gen_0]
+generate_target {instantiation_template} [get_files {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}]
+generate_target all [get_files  {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}]
+catch { config_ip_cache -export [get_ips -all blk_mem_gen_0] }
+export_ip_user_files -of_objects [get_files {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}]
+launch_runs blk_mem_gen_0_synth_1 -jobs 16
+wait_on_run blk_mem_gen_0_synth_1
+wait_on_run blk_mem_gen_0_synth_1
+export_simulation -lib_map_path [list {modelsim=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/modelsim} {questa=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/questa} {riviera=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/riviera} {activehdl=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/activehdl}] -of_objects [get_files {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}] -directory {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.ip_user_files/sim_scripts} -ip_user_files_dir {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.ip_user_files} -ipstatic_source_dir {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.ip_user_files/ipstatic} -use_ip_compiled_libs -force -quiet
