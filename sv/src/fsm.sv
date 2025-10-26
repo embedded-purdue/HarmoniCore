@@ -15,6 +15,7 @@ module fsm (
     output logic write_b2,
     output logic write_b3,
     output logic write_b4,
+    output logic clear
 );
 
 typedef enum logic [2:0] {
@@ -82,11 +83,13 @@ always_comb begin
     read_b2   = 1'b0;
     read_b3   = 1'b0;
     read_b4   = 1'b0;
-
+    clear     = 1'b0;
 
     case(current_state)
 
-        // We don't need an IDLE state because the default is already setting all outputs to 0
+        IDLE: begin
+            clear = 1'b1;
+        end
 
         READ: begin
             read_en = 1'b1;
@@ -116,7 +119,9 @@ always_comb begin
             write_b2 = 1'b1;
         end
 
-        default: begin end
+        default: begin
+            clear = 1'b1;
+        end
 
     endcase
 
