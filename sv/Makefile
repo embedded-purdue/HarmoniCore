@@ -2,14 +2,23 @@
 setup:
 	vivado -mode batch -source create_project.tcl
 clean:
-	rm -rf *.wdb *.jou *.log *.pb *.str
+	@echo Cleaning Vivado project files...
+	@cmd /C "del /Q *.wdb *.jou *.log *.pb *.str >nul 2>&1"
+	@cmd /C "rmdir /S /Q .Xil >nul 2>&1"
+	@cmd /C "rmdir /S /Q xsim.dir >nul 2>&1"
+	@cmd /C "rmdir /S /Q .runs >nul 2>&1"
+	@cmd /C "rmdir /S /Q .cache >nul 2>&1"
+	@cmd /C "rmdir /S /Q .sim >nul 2>&1"
+	@cmd /C "for /D %%G in (vivado_pid*) do rmdir /S /Q %%G >nul 2>&1"
+	@echo Clean complete.
 %.sim:
 	for %%f in (src\*.sv) do xvlog -sv %%f
 	xvlog -sv ./tb/$*_tb.sv
 	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
-	xvhdl ./HarmoniCore.gen/sources_1/ip/div/sim/div.vhd
+	xvhdl ./HarmoniCore.gen/sources_1/ip/div_gen/sim/div_gen.vhd
 	xvlog ./HarmoniCore.gen/sources_1/ip/blk_mem/simulation/blk_mem_gen_v8_4.v
 	xvlog ./HarmoniCore.gen/sources_1/ip/blk_mem/sim/blk_mem.v
+	xvhdl ./HarmoniCore.gen/sources_1/ip/shift_reg/sim/shift_reg.vhd
 	xelab -debug typical $*_tb -s $*_sim
 	xsim $*_sim -gui -view ./waves/$*_sim.wcfg
 Template.sim:

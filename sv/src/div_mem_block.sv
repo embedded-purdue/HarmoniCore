@@ -14,7 +14,7 @@ import types::*;
     output logic [17:0] final_out
 );
     // DIV OUTPUT
-    logic [47:0] result_data;
+    logic [23:0] result_data;
     logic result_valid;
 
     // DETERMINE WHAT TO SEND INTO DIV
@@ -114,8 +114,8 @@ import types::*;
         end
     end
 
-    // DIV MODULE (22 cycle latency) (find ports in .srcs/div/div.xci/boundary)
-    div divider (
+    // DIV MODULE (21 cycle latency) (find ports in .srcs/div/div.xci/boundary)
+    div_gen divider (
         .aclk(aclk),
         .s_axis_dividend_tvalid(dividend_valid),
         .s_axis_dividend_tdata(dividend_data),

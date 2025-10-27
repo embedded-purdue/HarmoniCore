@@ -22,26 +22,26 @@ set_property CONFIG.Implementation_Options radix_2_burst_io [get_ips fft_core]
 generate_target all [get_ips fft_core]
 
 ##################################################################
-# CREATE IP div
+# CREATE IP div_gen
 ##################################################################
 
-set div [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div]
+set div_gen [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div_gen]
 
 # User Parameters
 set_property -dict [list \
-  CONFIG.ACLKEN {false} \
-  CONFIG.ARESETN {false} \
+  CONFIG.algorithm_type {High_Radix} \
   CONFIG.dividend_and_quotient_width {18} \
   CONFIG.divisor_width {18} \
-  CONFIG.fractional_width {18} \
-  CONFIG.latency {22} \
-] [get_ips div]
+  CONFIG.fractional_width {0} \
+  CONFIG.latency {21} \
+  CONFIG.remainder_type {Fractional} \
+] [get_ips div_gen]
 
 # Runtime Parameters
 set_property -dict { 
   GENERATE_SYNTH_CHECKPOINT {1}
-} $div
-generate_target all [get_ips div]
+} $div_gen
+generate_target all [get_ips div_gen]
 
 ##################################################################
 
@@ -55,7 +55,7 @@ set blk_mem [create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version
 set_property -dict [list \
   CONFIG.Assume_Synchronous_Clk {true} \
   CONFIG.Memory_Type {True_Dual_Port_RAM} \
-  CONFIG.Write_Depth_A {11} \
+  CONFIG.Write_Depth_A {12} \
   CONFIG.Write_Width_A {18} \
 ] [get_ips blk_mem]
 
@@ -64,6 +64,26 @@ set_property -dict {
   GENERATE_SYNTH_CHECKPOINT {1}
 } $blk_mem
 generate_target all [get_ips blk_mem]
+
+##################################################################
+
+##################################################################
+# CREATE IP shift_reg
+##################################################################
+
+set shift_reg [create_ip -name c_shift_ram -vendor xilinx.com -library ip -version 12.0 -module_name shift_reg]
+
+# User Parameters
+set_property -dict [list \
+  CONFIG.Depth {22} \
+  CONFIG.Width {18} \
+] [get_ips shift_reg]
+
+# Runtime Parameters
+set_property -dict { 
+  GENERATE_SYNTH_CHECKPOINT {1}
+} $shift_reg
+generate_target all [get_ips shift_reg]
 
 ##################################################################
 
