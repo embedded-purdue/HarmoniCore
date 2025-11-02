@@ -4,14 +4,14 @@ import types::*;
 `include "../include/algoc_if.vh"
 
 module cumsum (
-    input logic clk, nRST,
+    input logic clk, rst,
     output logic [DW - 1:0] total,
     cumsum_if.c cif
 );
 
     logic [DW-1:0] next_total;
-    always_ff @(posedge clk, negedge nRST) begin : cumsumNext
-        if (~nRST) total <= '0;
+    always_ff @(posedge clk) begin : cumsumNext
+        if (rst) total <= '0;
         else       total <= next_total;
     end
 
