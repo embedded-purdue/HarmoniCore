@@ -4,7 +4,7 @@ import types::*;
 `include "../include/FFTwrapper_if.vh"
 
 module FFTwrapper (
-    input logic clk, nrst,
+    input logic clk, rst,
     FFTwrapper_if.fft fftif
 );
 
@@ -34,7 +34,7 @@ module FFTwrapper (
 
     fft_core your_instance_name (
     .aclk(clk),                                                // input wire aclk
-    .aresetn(nrst),                                          // input wire aresetn
+    .aresetn(rst),                                          // input wire aresetn
     .s_axis_config_tdata(s_axis_config_tdata),                  // input wire [7 : 0] s_axis_config_tdata
     .s_axis_config_tvalid(s_axis_config_tvalid),                // input wire s_axis_config_tvalid
     .s_axis_config_tready(s_axis_config_tready),                // output wire s_axis_config_tready

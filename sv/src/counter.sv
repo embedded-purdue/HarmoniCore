@@ -5,7 +5,7 @@ module counter #(
     parameter SIZE = 4
 ) (
     input logic clk,
-    input logic n_rst,
+    input logic rst,
     input logic clear,
     input logic count_enable,
     input logic [SIZE-1:0] rollover_val,
@@ -16,8 +16,8 @@ module counter #(
 logic [SIZE-1:0] next_count;
 logic next_flag;
 
-always_ff @(posedge clk, negedge n_rst) begin : counter_ff
-    if (!n_rst) begin
+    always_ff @(posedge clk, posedge rst) begin : counter_ff
+    if (rst) begin
         count <= '0;
         flag <= 1'b0;
     end else begin
