@@ -1,8 +1,6 @@
 
 `timescale 1ns / 1ps
 `include "../include/types.sv"
-
-module cumsum 
 import types::*;
 `include "../include/algoc_if.vh"
 
