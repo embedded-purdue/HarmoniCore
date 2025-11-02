@@ -33,7 +33,7 @@ FFTwrapper_sim:
 	xsim FFTwrapper_tb -gui -view waves/FFTwrapper_sim.wcfg
 
 FFTwrapper:
-	xvlog -sv src/*.sv include/*.sv && \
+	xvlog -sv src/FFTwrapper.sv include/FFTwrapper_if.vh && \
 	xvlog -sv tb/FFTwrapper_tb.sv && \
 	xvhdl HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd && \
 	xelab -debug typical FFTwrapper_tb -s FFTwrapper_tb && \
