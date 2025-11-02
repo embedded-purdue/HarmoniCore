@@ -1,0 +1,12 @@
+# Vivado-generated build junk
+*.jou
+*.log
+*.pb
+*.sdb
+*.vdb
+*.rlx
+*.xpr
+*.runs/
+*.gen/
+xsim.dir/
+*.wdb

@@ -1,4 +1,0 @@
-xpm_memory.sv,systemverilog,xpm,C:/Xilinix/2025.1/Vivado/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv,incdir="C:/Xilinix/2025.1/Vivado/data/rsb/busdef"incdir="../../../include"
-FFTwrapper.sv,systemverilog,xil_defaultlib,sv/src/FFTwrapper.sv,incdir="C:/Xilinix/2025.1/Vivado/data/rsb/busdef"incdir="../../../include"
-FFTwrapper_tb.sv,systemverilog,xil_defaultlib,sv/tb/FFTwrapper_tb.sv,incdir="C:/Xilinix/2025.1/Vivado/data/rsb/busdef"incdir="../../../include"
-glbl.v,Verilog,xil_defaultlib,glbl.v

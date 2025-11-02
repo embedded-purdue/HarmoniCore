@@ -1,10 +1,16 @@
 Vivado Simulator v2025.1.0
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-Running: C:/Xilinix/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe -debug typical interpolater_tb -s interpolater_sim 
-Multi-threading is on. Using 14 slave threads.
+Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe -debug typical find_trough_tb -s find_trough_tb 
+Multi-threading is on. Using 10 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-9145] library name 'div_gen_v5_1_24' of instantiated unit conflicts with the name of another visible identifier [D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.gen/sources_1/ip/div_gen_0/sim/div_gen_0.vhd:145]
-ERROR: [VRFC 10-9380] size mismatch in mixed-language port association of VHDL port 's_axis_divisor_tdata' [D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/src/interpolater.sv:11]
-ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package work.types
+Compiling module work.find_trough_if_default
+Compiling module work.find_trough_default
+Compiling module work.find_trough_tb
+Built simulation snapshot find_trough_tb

@@ -1,2 +1,5 @@
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/tb/interpolater_tb.sv" into library work
-INFO: [VRFC 10-311] analyzing module interpolater_tb
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/include/types.sv" into library work
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/src/find_trough.sv" into library work
+INFO: [VRFC 10-311] analyzing module find_trough
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/tb/find_trough_tb.sv" into library work
+INFO: [VRFC 10-311] analyzing module find_trough_tb
