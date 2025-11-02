@@ -4,7 +4,7 @@ import types::*;
 `include "../include/find_trough_if.vh"
 
 module find_trough (
-    input logic clk, nrst,
+    input logic clk, rst,
     find_trough_if trif
 );
 
@@ -26,12 +26,34 @@ module find_trough (
     parameter MAX_YIN_VAL = 10000;
     parameter TEMP_FRAME_SIZE = FRAME_LEN - 2028;
 
-    logic [DW-1:0] next_yin, curr_yin, prev_yin, n_min_yin, n_tau, min_yin;
+    logic signed [DW-1:0] next_yin, curr_yin, prev_yin, n_min_yin, n_tau, min_yin;
     logic [DECIMALBITS-1:0] curr_yin_ind, n_ind, n_min_ind, trough_index, n_trough_index;
     logic delay_reset, n_delay_reset, en, n_trough_found, trough_found, p_trough_found, min_found, n_min_found;
 
-    always_ff @(posedge clk, negedge nrst) begin : registers
-        if (~nrst) begin
+    // always_ff @(posedge clk, negedge nrst) begin : registers
+    always_ff @(posedge clk) begin : registers
+        // if (~nrst) begin
+        //     next_yin <= 0;
+        //     curr_yin <= 0;
+        //     prev_yin <= 0;
+            
+        //     trif.idx <= 0;
+        //     min_yin <= MAX_YIN_VAL;
+        
+        //     trough_index <= 0;
+        //     trough_found <= 0;
+        //     p_trough_found <= 0;
+
+        //     delay_reset <= 0;
+        //     en <= 0;
+
+        //     trif.tau <= 0;
+
+        //     min_found <= 0;
+            
+        // end
+        // else begin
+        if (rst) begin
             next_yin <= 0;
             curr_yin <= 0;
             prev_yin <= 0;
@@ -49,7 +71,6 @@ module find_trough (
             trif.tau <= 0;
 
             min_found <= 0;
-            
         end
         else begin
             en <= trif.enable;
@@ -80,6 +101,7 @@ module find_trough (
             end
         end
     end
+    // end
 
     // COUNTER
     /*
@@ -89,8 +111,13 @@ module find_trough (
     */
     logic frame_done, n_frame_done;
     logic [DECIMALBITS-1:0] n_yin_ind;
-    always_ff @(posedge clk, negedge nrst ) begin : counter
-        if (~nrst) begin
+    always_ff @(posedge clk) begin : counter
+        // if (~nrst) begin
+        //     n_yin_ind <= 0;
+        //     frame_done <= 0;
+        // end
+        // else begin
+        if (rst) begin
             n_yin_ind <= 0;
             frame_done <= 0;
         end
@@ -161,20 +188,25 @@ module find_trough (
     end
 
     // Register next, curr, and prev yin values
-    always_ff @(posedge clk, negedge nrst) begin
-        if (~nrst) begin
-            trif.next_yin <= 0;
-            trif.curr_yin <= 0;
-            trif.prev_yin <= 0;
+    always_ff @(posedge clk, negedge rst) begin
+        // if (~nrst) begin
+        //     trif.next_yin <= 0;
+        //     trif.curr_yin <= 0;
+        //     trif.prev_yin <= 0;
+        // end
+        // else begin
+        if (rst) begin
+                trif.next_yin <= 0;
+                trif.curr_yin <= 0;
+                trif.prev_yin <= 0;
         end
-        else begin
-            if ((n_trough_found & ~trough_found) || (~n_trough_found & n_min_found)) begin
+        if ((n_trough_found & ~trough_found) || (~n_trough_found & n_min_found)) begin
                 trif.next_yin <= next_yin;
                 trif.curr_yin <= curr_yin;
                 trif.prev_yin <= prev_yin;
-            end
         end
     end
+    
 
 
 

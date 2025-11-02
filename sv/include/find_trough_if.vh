@@ -9,7 +9,7 @@ import types::*;
 interface find_trough_if;
 
     // logic frame_done; // or rst
-    logic [DW-1:0] yin_in, next_yin, curr_yin, prev_yin;
+    logic signed [DW-1:0] yin_in, next_yin, curr_yin, prev_yin;
     logic [DECIMALBITS-1:0] idx;
     // I think DW is the width?
     logic [DW-1:0] tau;        // not sure how big the width will be

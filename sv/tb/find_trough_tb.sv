@@ -12,14 +12,14 @@ module find_trough_tb;
     logic clk = 0;
     always #(PERIOD/2) clk++;
 
-    logic nrst;
+    logic rst;
 
     find_trough_if trif();
-    find_trough DUT(.clk(clk), .nrst(nrst), .trif(trif));    
+    find_trough DUT(.clk(clk), .rst(rst), .trif(trif));    
 
     task reset_dut;
         begin
-            nrst = 1'b0;
+            rst = 1'b1;
             // trif.frame_done = 1'b0;
             trif.yin_in = 18'b0;
             // trif.count_out = 1'b0;
@@ -27,7 +27,7 @@ module find_trough_tb;
             @(posedge clk);
             @(posedge clk);
             @(negedge clk);
-            nrst = 1'b1;
+            rst = 1'b0;
             @(posedge clk);
             @(posedge clk);
         end
@@ -257,7 +257,6 @@ module find_trough_tb;
     initial begin
         // $monitor("%0t min_yin: %h", $time, min_yin);
         curr = "RESET";
-        nrst = 0;
         reset_dut();
 
         // curr = "Test Trough";
