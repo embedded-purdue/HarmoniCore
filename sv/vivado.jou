@@ -3,22 +3,40 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Sun Oct 26 13:14:24 2025
-# Process ID         : 48920
-# Current directory  : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv
-# Command line       : vivado.exe -mode batch -source create_project.tcl
-# Log file           : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/vivado.log
-# Journal file       : C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv\vivado.jou
-# Running On         : M-Dell-64
+# Start of session at: Sun Oct 26 14:17:32 2025
+# Process ID         : 22700
+# Current directory  : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent7152 D:\School\Fall 2025\ESAP\Hcore\HarmoniCore\sv\HarmoniCore.xpr
+# Log file           : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/vivado.log
+# Journal file       : D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv\vivado.jou
+# Running On         : LAPTOP-ECVP0FVU
 # Platform           : Windows Server 2016 or Windows 10
-# Operating System   : 26100
-# Processor Detail   : Intel(R) Core(TM) i7-9850H CPU @ 2.60GHz
-# CPU Frequency      : 2592 MHz
-# CPU Physical cores : 6
-# CPU Logical cores  : 12
-# Host memory        : 68424 MB
-# Swap memory        : 4294 MB
-# Total Virtual      : 72719 MB
-# Available Virtual  : 42513 MB
+# Operating System   : 22000
+# Processor Detail   : AMD Ryzen 7 5800H with Radeon Graphics         
+# CPU Frequency      : 3194 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 17024 MB
+# Swap memory        : 14495 MB
+# Total Virtual      : 31520 MB
+# Available Virtual  : 15233 MB
 #-----------------------------------------------------------
-source create_project.tcl
+start_gui
+open_project {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.xpr}
+update_compile_order -fileset sources_1
+create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name blk_mem_gen_0
+set_property -dict [list \
+  CONFIG.Assume_Synchronous_Clk {true} \
+  CONFIG.Memory_Type {True_Dual_Port_RAM} \
+  CONFIG.Write_Depth_A {12} \
+  CONFIG.Write_Width_A {18} \
+] [get_ips blk_mem_gen_0]
+generate_target {instantiation_template} [get_files {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}]
+generate_target all [get_files  {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}]
+catch { config_ip_cache -export [get_ips -all blk_mem_gen_0] }
+export_ip_user_files -of_objects [get_files {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}]
+launch_runs blk_mem_gen_0_synth_1 -jobs 16
+wait_on_run blk_mem_gen_0_synth_1
+wait_on_run blk_mem_gen_0_synth_1
+export_simulation -lib_map_path [list {modelsim=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/modelsim} {questa=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/questa} {riviera=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/riviera} {activehdl=D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.cache/compile_simlib/activehdl}] -of_objects [get_files {{d:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci}}] -directory {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.ip_user_files/sim_scripts} -ip_user_files_dir {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.ip_user_files} -ipstatic_source_dir {D:/School/Fall 2025/ESAP/Hcore/HarmoniCore/sv/HarmoniCore.ip_user_files/ipstatic} -use_ip_compiled_libs -force -quiet

@@ -21,9 +21,29 @@ set_property CONFIG.Output_Ordering natural_order [get_ips fft_core]
 set_property CONFIG.Implementation_Options radix_2_burst_io [get_ips fft_core]
 generate_target all [get_ips fft_core]
 
+##################################################################
+# CREATE IP div_gen_0
+##################################################################
+
+
+set div_gen_0 [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div_gen_0 -generate_wrapper]
+set_property -dict [list \
+  CONFIG.algorithm_type {High_Radix} \
+  CONFIG.divide_by_zero_detect {false} \
+  CONFIG.dividend_and_quotient_width {18} \
+  CONFIG.divisor_width {18} \
+  CONFIG.fractional_width {0} \
+  CONFIG.latency {21} \
+  CONFIG.remainder_type {Fractional} \
+] [get_ips div_gen_0]
+generate_target all [get_ips div_gen_0]
+add_files ./HarmoniCore.srcs/sources_1/ip/div_gen_0/div_gen_0.v
+##################################################################
+
 add_files constraints.xdc
 set_property FILE_TYPE XDC [get_files constraints.xdc]
 set_property top AFC [current_fileset] 
+
 
 set include_path "./include"
 foreach file [glob -directory $include_path *] {
