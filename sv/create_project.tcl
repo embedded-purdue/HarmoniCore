@@ -21,6 +21,72 @@ set_property CONFIG.Output_Ordering natural_order [get_ips fft_core]
 set_property CONFIG.Implementation_Options radix_2_burst_io [get_ips fft_core]
 generate_target all [get_ips fft_core]
 
+##################################################################
+# CREATE IP div_gen
+##################################################################
+
+set div_gen [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div_gen]
+
+# User Parameters
+set_property -dict [list \
+  CONFIG.algorithm_type {High_Radix} \
+  CONFIG.dividend_and_quotient_width {18} \
+  CONFIG.divisor_width {18} \
+  CONFIG.fractional_width {0} \
+  CONFIG.latency {21} \
+  CONFIG.remainder_type {Fractional} \
+] [get_ips div_gen]
+
+# Runtime Parameters
+set_property -dict { 
+  GENERATE_SYNTH_CHECKPOINT {1}
+} $div_gen
+generate_target all [get_ips div_gen]
+
+##################################################################
+
+##################################################################
+# CREATE IP blk_mem
+##################################################################
+
+set blk_mem [create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name blk_mem]
+
+# User Parameters
+set_property -dict [list \
+  CONFIG.Assume_Synchronous_Clk {true} \
+  CONFIG.Memory_Type {True_Dual_Port_RAM} \
+  CONFIG.Write_Depth_A {12} \
+  CONFIG.Write_Width_A {18} \
+] [get_ips blk_mem]
+
+# Runtime Parameters
+set_property -dict { 
+  GENERATE_SYNTH_CHECKPOINT {1}
+} $blk_mem
+generate_target all [get_ips blk_mem]
+
+##################################################################
+
+##################################################################
+# CREATE IP shift_reg
+##################################################################
+
+set shift_reg [create_ip -name c_shift_ram -vendor xilinx.com -library ip -version 12.0 -module_name shift_reg]
+
+# User Parameters
+set_property -dict [list \
+  CONFIG.Depth {22} \
+  CONFIG.Width {18} \
+] [get_ips shift_reg]
+
+# Runtime Parameters
+set_property -dict { 
+  GENERATE_SYNTH_CHECKPOINT {1}
+} $shift_reg
+generate_target all [get_ips shift_reg]
+
+##################################################################
+
 add_files constraints.xdc
 set_property FILE_TYPE XDC [get_files constraints.xdc]
 set_property top AFC [current_fileset] 

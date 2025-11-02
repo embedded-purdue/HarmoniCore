@@ -18,7 +18,8 @@ package types;
     parameter TROUGH_THRESHOLD = 0.1;
     parameter FMIN = 65.41; //C2
     parameter FMAX = 2093; //C7
-
+    parameter MAX_PERIOD = 675; // SR / FMAX
+    parameter MIN_PERIOD = 21; // SR / MIN
 endpackage
 
 `endif 
