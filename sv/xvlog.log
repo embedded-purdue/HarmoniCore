@@ -1,0 +1,8 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/tejas/Projects/HarmoniCore/sv/src/FFTwrapper.sv" into library work
+INFO: [VRFC 10-311] analyzing module FFTwrapper
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/tejas/Projects/HarmoniCore/sv/src/FPMultiply.sv" into library work
+INFO: [VRFC 10-311] analyzing module FPMultiply
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/tejas/Projects/HarmoniCore/sv/src/fsm.sv" into library work
+INFO: [VRFC 10-311] analyzing module fsm
+ERROR: [VRFC 10-4982] syntax error near '}' [C:/Users/tejas/Projects/HarmoniCore/sv/src/fsm.sv:29]
+ERROR: [VRFC 10-8530] module 'fsm' is ignored due to previous errors [C:/Users/tejas/Projects/HarmoniCore/sv/src/fsm.sv:1]

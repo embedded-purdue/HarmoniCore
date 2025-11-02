@@ -2,8 +2,9 @@ module fsm (
     input  logic clk,
     input  logic n_rst,
     input  logic empty,
-    input  logic hl_done, // moves away from READ (when we finish reading the first )
+    input  logic hop_flag, // moves away from READ (when we finish reading the first )
     input  logic hoplength_flag, // moves away from READ_BX
+    input  logic countersel_flag, // ends READ_B1
     input  logic fft_done,
     output logic read_en,
     output logic count_en,
@@ -24,7 +25,7 @@ typedef enum logic [2:0] {
     READ_B1 = 3'b010,
     READ_B2 = 3'b011,
     READ_B3 = 3'b100,
-    READ_B4 = 3'b101,
+    READ_B4 = 3'b101
 } state_t;
 
 state_t current_state, next_state;
@@ -47,7 +48,7 @@ always_comb begin
         end
         
         READ: begin
-            if (hl_done)
+            if (hop_flag)
                 next_state = READ_B4;
         end
         
@@ -67,7 +68,7 @@ always_comb begin
         end
         
         READ_B1: begin
-            if (hoplength_flag)
+            if (countersel_flag)
                 next_state = IDLE;
         end
         

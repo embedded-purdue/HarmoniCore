@@ -7,7 +7,8 @@ clean:
 	for %%f in (src\*.sv) do xvlog -sv %%f
 	xvlog -sv ./tb/$*_tb.sv
 	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
-	xelab -debug typical $*_tb -s $*_sim
+	# Use the make stem ($*) as the elaboration top-level so targets like `make tb_fsm.sim` work
+	xelab -debug typical $* -s $*_sim
 	xsim $*_sim -gui -view ./waves/$*_sim.wcfg
 Template.sim:
 	xvlog -sv ./tb/AFC_tb.sv ./src/*.sv 
