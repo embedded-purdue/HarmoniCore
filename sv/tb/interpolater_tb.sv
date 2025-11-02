@@ -12,14 +12,14 @@ module interpolater_tb ();
     logic clk = 0;
     always #(PERIOD/2) clk++;
 
-    logic nrst;
+    logic rst;
 
     interpolater_if intif();
-    find_trough DUT(.clk(clk), .nrst(nrst), .intif(intif.interp));    
+    find_trough DUT(.clk(clk), .rst(rst), .intif(intif.interp));    
 
     task reset_dut;
         begin
-            nrst = 1'b0;
+            rst = 1'b0;
             // trif.frame_done = 1'b0;
             trif.yin_in = 18'b0;
             // trif.count_out = 1'b0;
@@ -27,7 +27,7 @@ module interpolater_tb ();
             @(posedge clk);
             @(posedge clk);
             @(negedge clk);
-            nrst = 1'b1;
+            rst = 1'b1;
             @(posedge clk);
             @(posedge clk);
         end
@@ -53,7 +53,7 @@ module interpolater_tb ();
     initial begin
         // $monitor("%0t min_yin: %h", $time, min_yin);
         curr = "RESET";
-        nrst = 0;
+        rst = 0;
         reset_dut();
 
         // curr = "Test Trough";
