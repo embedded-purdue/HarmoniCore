@@ -15,11 +15,11 @@ module interpolater_tb ();
     logic rst;
 
     interpolater_if intif();
-    find_trough DUT(.clk(clk), .rst(rst), .intif(intif.interp));    
+    find_trough DUT(.clk(clk), .intif(intif.interp));    
 
     task reset_dut;
         begin
-            rst = 1'b0;
+            rst = 1'b1;
             // trif.frame_done = 1'b0;
             trif.yin_in = 18'b0;
             // trif.count_out = 1'b0;
