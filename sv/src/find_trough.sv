@@ -4,7 +4,7 @@ import types::*;
 `include "../include/find_trough_if.vh"
 
 module find_trough (
-    input logic clk, nrst,
+    input logic clk, rst,
     find_trough_if trif
 );
 
@@ -30,8 +30,8 @@ module find_trough (
     logic [DECIMALBITS-1:0] curr_yin_ind, n_ind, n_min_ind, trough_index, n_trough_index;
     logic delay_reset, n_delay_reset, en, n_trough_found, trough_found, p_trough_found, min_found, n_min_found;
 
-    always_ff @(posedge clk, negedge nrst) begin : registers
-        if (~nrst) begin
+    always_ff @(posedge clk, negedge rst) begin : registers
+        if (rst) begin
             next_yin <= 0;
             curr_yin <= 0;
             prev_yin <= 0;
@@ -89,8 +89,8 @@ module find_trough (
     */
     logic frame_done, n_frame_done;
     logic [DECIMALBITS-1:0] n_yin_ind;
-    always_ff @(posedge clk, negedge nrst ) begin : counter
-        if (~nrst) begin
+    always_ff @(posedge clk, negedge rst ) begin : counter
+        if (rst) begin
             n_yin_ind <= 0;
             frame_done <= 0;
         end
@@ -161,8 +161,8 @@ module find_trough (
     end
 
     // Register next, curr, and prev yin values
-    always_ff @(posedge clk, negedge nrst) begin
-        if (~nrst) begin
+    always_ff @(posedge clk, negedge rst) begin
+        if (rst) begin
             trif.next_yin <= 0;
             trif.curr_yin <= 0;
             trif.prev_yin <= 0;
@@ -217,13 +217,13 @@ module find_trough (
 
     // // typedef enum logic[1:0] {RESET, CYCLE1, CYCLE2} state;
 
-    // // always_ff @(posedge clk, negedge nrst) begin : fsm
-    // //     if (~nrst) begin
+    // // always_ff @(posedge clk, negedge rst) begin : fsm
+    // //     if (rst) begin
     // //     end
     // // end
 
-    // always_ff @(posedge clk, negedge nrst) begin : Controller
-    //     if (~nrst) begin    // or rst 
+    // always_ff @(posedge clk, negedge rst) begin : Controller
+    //     if (rst) begin    // or rst 
     //         min_index         <= 0;
     //         trough_index      <= 0;
     //         trif.trough_found <= 0;

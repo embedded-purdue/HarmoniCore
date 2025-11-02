@@ -4,7 +4,7 @@ import types::*;
 `include "../include/interpolater_if.vh"
 
 module find_trough (
-    input logic clk, nrst,
+    input logic clk, rst,
     interpolater_if.interp intif
 );
 
