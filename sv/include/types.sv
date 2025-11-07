@@ -18,7 +18,7 @@ package types;
     parameter TROUGH_THRESHOLD = 0.1;
     parameter FMIN = 65.41; //C2
     parameter FMAX = 2093; //C7
-
+    parameter DIVISOR = 10; //Randomly set - Neal
 endpackage
 
 `endif 
