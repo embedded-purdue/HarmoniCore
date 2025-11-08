@@ -1,6 +1,6 @@
 module fsm (
     input  logic clk,
-    input  logic n_rst,
+    input  logic rst,
     input  logic empty,
     input  logic hop_flag, // moves away from READ (when we finish reading the first )
     input  logic hoplength_flag, // moves away from READ_BX
@@ -30,8 +30,8 @@ typedef enum logic [2:0] {
 
 state_t current_state, next_state;
 
-always_ff @(posedge clk, negedge n_rst) begin
-    if (!n_rst)
+always_ff @(posedge clk) begin
+    if (rst)
         current_state <= IDLE;
     else
         current_state <= next_state;
@@ -42,7 +42,7 @@ always_comb begin
     next_state = current_state;
 
     case(current_state) 
-        IDLE: begin
+        IDLE: begin 
             if (~empty & fft_done)
                 next_state = READ;
         end

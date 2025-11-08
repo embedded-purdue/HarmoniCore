@@ -5,7 +5,7 @@ module fsm_tb ();
 
     //inputs 
     logic clk;
-    logic n_rst;
+    logic rst;
     logic empty;
     logic hop_flag; // moves away from READ (when we finish reading the first )
     logic hoplength_flag; // moves away from READ_BX
@@ -35,9 +35,9 @@ module fsm_tb ();
     //reset 
     task reset_dut;
     begin
-        n_rst = 0;
+        rst = 1;
         repeat (2) @(posedge clk);
-        n_rst = 1;
+        rst = 0;
         repeat (2) @(posedge clk);
     end
     endtask
@@ -50,6 +50,7 @@ module fsm_tb ();
         fft_done = 1;
         @(posedge clk);
         fft_done = 0;
+        repeat (2) @(posedge clk);
     end
     endtask
 
@@ -106,21 +107,23 @@ module fsm_tb ();
 
     initial begin
 
-        $display("Time(ns)\tclk n_rst empty fft_done hop_flag hoplen countersel state read_en");
-        $monitor("%0t\t%b %b %b %b %b %b %b %0d %b", $time, clk, n_rst, empty, fft_done, hop_flag, hoplength_flag, countersel_flag, DUT.current_state, read_en);
+        $display("Time(ns)\tclk rst empty fft_done hop_flag hoplen countersel state read_en");
+       // $monitor("%0t\t%b %b %b %b %b %b %b %0d %b", $time, clk, rst, empty, fft_done, hop_flag, hoplength_flag, countersel_flag, DUT.current_state, read_en);
 
         empty = 0;
         hop_flag = 0;
         hoplength_flag = 0;
         countersel_flag = 0;
         fft_done = 0;
-        reset_dut;
+        reset_dut();
 
         // IDLE self-loop (start=0)
         repeat (4) @(posedge clk);
 
         // Start reading process
         start_reading();
+
+        repeat (4) @(posedge clk);
 
         // Move through READ_BX states
         move_to_bx(4);
@@ -144,6 +147,7 @@ module fsm_tb ();
         reset_dut;
 
         start_reading();
+        repeat (4) @(posedge clk);
 
         // Test extraneous hop_flag in READ state
         hop_flag = 1;
