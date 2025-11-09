@@ -9,16 +9,16 @@ parameter PERIOD = 10;
 
 module counter_tb;
 
-	logic clk;
+	logic clk = 0;
 	logic rst; //reset held low, synchronous ACTIVE HIGH SYNCHRNOUS, RESET not nreset
 	logic clear;
 	logic count_en;
-	logic [1:0] rollover_val;
-	logic [1:0] count;
+	logic [3:0] rollover_val;
+	logic [3:0] count;
 	logic flag;
 
 	//CLK gen
-   	always #(PERIOD/2) clk++;
+   	always #(PERIOD/2) clk = ~clk;
 	
 	counter DUT(clk, rst, clear, count_en, rollover_val, count, flag);
 
@@ -28,15 +28,16 @@ module counter_tb;
 		count_en = 1'b0;
 		rollover_val = 10;
 		
+		rst = 1'b1; 		//actually begins the program
 		@(posedge clk);
 		//#(PERIOD*2); (waits this amount of time, not used)
-
+		
 		//testing always_ff
 		if((count !== '0) || (flag !== 1'b0))begin
 			$display("always_ff: Incorrect for count or flag (desired 0, is %b), begin (desired 1'b0, is %b)", count, flag);	
 		end
-
-		rst = 1'b1; 		//actually begins the program
+        
+        rst = 1'b0;
 		@(posedge clk); 	//new clock edge
 		
 		//testing always_comb 
