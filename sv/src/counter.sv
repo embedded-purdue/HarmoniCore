@@ -37,7 +37,7 @@ end
 
 always_comb begin : flagLogic
     next_flag = flag;
-    if (count == rollover_val) next_flag = 1'b1; // We want a cycle delay
+    if (count == (rollover_val - 1)) next_flag = 1'b1; // We want a cycle delay
     else                       next_flag = 1'b0;
 end
 
