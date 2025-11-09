@@ -1,44 +1,83 @@
 `timescale 1ns / 1ps
 `include "../include/types.sv"
-import types::*;
+import types::*; 
 `include "../include/interpolater_if.vh"
 
-module interpolater (
-    input logic clk, nrst,
-    interpolater_if.interp intif
-);
+module interpolater (input logic clk, rst,
+                     interpolater_if.interp intif
+  );
 
-logic [23:0] denom_tdata, numer_tdata, quotient_tdata;
-logic denom_tvalid, denom_tready, numer_tvalid,
-      numer_tready, quotient_tvalid;
+  logic [23:0] denom_tdata, numer_tdata, numer_reg, denom_reg;
+  logic n_ready_flag, ready_flag_reg;
 
-always_comb begin : 
-  denom_tdata = (intif.prev_yin - (intif.curr_yin << 1) + intif.next_yin)
-  if ()
-  
-end
+  logic signed [DW + 1:0] ex_max, ex_min, denom_temp, numer_temp;
+  assign ex_max = MAX_VAL;
+  assign ex_min = MIN_VAL;
 
+  always_ff @(posedge clk) begin : regs
+    if (rst) begin
+      numer_reg      <= 0;
+      denom_reg      <= 0;
+      ready_flag_reg <= 0;
+    end
+    else begin
+      numer_reg      <= numer_tdata;
+      denom_reg      <= denom_tdata;
+      ready_flag_reg <= n_ready_flag;
+    end
+  end
 
-assign ;
+  always_comb begin
+    numer_tdata = numer_reg;
+    denom_tdata = denom_reg;
+    numer_temp = 24'h0;
+    denom_temp = 24'h0;
+    n_ready_flag = ready_flag_reg;
 
-div_gen_0 divide (
-  .aclk(clk),                                      // input wire aclk
-  .s_axis_divisor_tvalid({6'b0, intif.prev_yin}),    // input wire s_axis_divisor_tvalid
-  .s_axis_divisor_tready(s_axis_divisor_tready),    // output wire s_axis_divisor_tready
-  .s_axis_divisor_tdata({6'b0, intif.prev_yin}),      // input wire [23 : 0] s_axis_divisor_tdata
-  .s_axis_dividend_tvalid(s_axis_dividend_tvalid),  // input wire s_axis_dividend_tvalid
-  .s_axis_dividend_tready(s_axis_dividend_tready),  // output wire s_axis_dividend_tready
-  .s_axis_dividend_tdata(s_axis_dividend_tdata),    // input wire [23 : 0] s_axis_dividend_tdata
-  .m_axis_dout_tvalid(m_axis_dout_tvalid),          // output wire m_axis_dout_tvalid
-  .m_axis_dout_tdata(m_axis_dout_tdata)            // output wire [23 : 0] m_axis_dout_tdata
-);
+    if (intif.frame_done) begin
+      denom_tdata = 24'h0;
+      numer_tdata = 24'h0;
+      n_ready_flag = 1'b0;
+    end
+    else if (intif.trough_found) // found a trough 
+    begin
+      denom_temp = (intif.prev_yin - (intif.curr_yin <<< 1) + intif.next_yin);
+      numer_temp = (intif.prev_yin - intif.next_yin) >>> 1;
+      
+      if (denom_temp > ex_max)
+        begin
+          denom_temp = ex_max;
+        end
+      else if (denom_temp < ex_min)
+        begin
+          denom_temp = ex_min;
+        end
+      else
+        begin
+          denom_temp = denom_temp;
+        end
 
+      if (numer_temp > ex_max)
+        begin
+          numer_temp = ex_max;
+        end
+      else if (numer_temp < ex_min)
+        begin
+          numer_temp = ex_min;
+        end
+      else
+        begin
+          numer_temp = numer_temp;
+        end
+        
+      denom_tdata = {{6{denom_temp[17]}}, denom_temp[17:0]};
+      numer_tdata = {{6{numer_temp[17]}}, numer_temp[17:0]};
+      n_ready_flag = 1'b1;   
+      end
+  end
 
-// INST_TAG_END ------ End INSTANTIATION Template ---------
-
-// You must compile the wrapper file div_gen_0.v when simulating
-// the core, div_gen_0. When compiling the wrapper file, be sure to
-// reference the Verilog simulation library.
-
+  assign intif.numer = numer_reg;
+  assign intif.denom = denom_reg;
+  assign intif.divide_out_ready = ready_flag_reg;
 
 endmodule
