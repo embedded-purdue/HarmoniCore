@@ -16,4 +16,3 @@ trough_threshold = 0.1
 # Calculate minimum and maximum periods
 min_period = int(np.floor(SR / fmax))
 max_period = min(int(np.ceil(SR / fmin)), frame_length - win_length - 1)
-

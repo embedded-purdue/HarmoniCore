@@ -15,7 +15,7 @@ clean:
 	for %%f in (src\*.sv) do xvlog -sv %%f
 	xvlog -sv ./tb/$*_tb.sv
 	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
-	xvhdl ./HarmoniCore.gen/sources_1/ip/div_gen/sim/div_gen.vhd
+	xvhdl ./HarmoniCore.gen/sources_1/ip/div/sim/div.vhd
 	xvlog ./HarmoniCore.gen/sources_1/ip/blk_mem/simulation/blk_mem_gen_v8_4.v
 	xvlog ./HarmoniCore.gen/sources_1/ip/blk_mem/sim/blk_mem.v
 	xvhdl ./HarmoniCore.gen/sources_1/ip/shift_reg/sim/shift_reg.vhd

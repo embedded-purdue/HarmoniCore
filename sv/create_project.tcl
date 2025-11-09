@@ -22,26 +22,26 @@ set_property CONFIG.Implementation_Options radix_2_burst_io [get_ips fft_core]
 generate_target all [get_ips fft_core]
 
 ##################################################################
-# CREATE IP div_gen
+# CREATE IP div
 ##################################################################
 
-set div_gen [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div_gen]
+set div [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -module_name div]
 
 # User Parameters
 set_property -dict [list \
-  CONFIG.algorithm_type {High_Radix} \
+  CONFIG.ARESETN {true} \
   CONFIG.dividend_and_quotient_width {18} \
   CONFIG.divisor_width {18} \
-  CONFIG.fractional_width {0} \
-  CONFIG.latency {21} \
+  CONFIG.fractional_width {11} \
+  CONFIG.latency {33} \
   CONFIG.remainder_type {Fractional} \
-] [get_ips div_gen]
+] [get_ips div]
 
 # Runtime Parameters
 set_property -dict { 
   GENERATE_SYNTH_CHECKPOINT {1}
-} $div_gen
-generate_target all [get_ips div_gen]
+} $div
+generate_target all [get_ips div]
 
 ##################################################################
 
@@ -75,7 +75,7 @@ set shift_reg [create_ip -name c_shift_ram -vendor xilinx.com -library ip -versi
 
 # User Parameters
 set_property -dict [list \
-  CONFIG.Depth {22} \
+  CONFIG.Depth {24} \
   CONFIG.Width {18} \
 ] [get_ips shift_reg]
 

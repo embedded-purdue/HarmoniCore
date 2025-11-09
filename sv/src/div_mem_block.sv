@@ -11,7 +11,7 @@ import types::*;
     input logic [DW-1:0] total,
     input logic [DW-1:0] count,
     input logic [DW-1:0] delayed_diff,
-    output logic [17:0] final_out
+    output logic [DW-1:0] final_out
 );
     // DIV OUTPUT
     logic [23:0] result_data;
@@ -67,8 +67,8 @@ import types::*;
         else if (result_valid) begin // write data
             a_in = result_data[DW-1:0];
             b_in = delayed_diff;
-            a_addr = sp_w - 8;
-            b_addr = sp_w - 4;
+            a_addr = sp_w;
+            b_addr = sp_w + 4;
             a_wr = 1'b1;
             b_wr = 1'b1;
         end
@@ -106,7 +106,7 @@ import types::*;
             dividend_data <= {'0, a_out};
             divisor_data <= {'0, b_out};
         end
-        else if (count >= MIN_VAL - 1) begin
+        else if (count >= MIN_PERIOD - 1) begin
             dividend_valid <= 1'b1;
             divisor_valid <= 1'b1;
             dividend_data <= {'0, total};
@@ -116,7 +116,7 @@ import types::*;
 
     // DIV MODULE (21 cycle latency) (find ports in .srcs/div/div.xci/boundary)
     div_gen divider (
-        .aclk(aclk),
+        .aclk(clk),
         .s_axis_dividend_tvalid(dividend_valid),
         .s_axis_dividend_tdata(dividend_data),
         .s_axis_divisor_tvalid(divisor_valid),
