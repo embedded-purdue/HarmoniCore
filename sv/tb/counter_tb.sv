@@ -32,7 +32,7 @@ module counter_tb;
 		//#(PERIOD*2); (waits this amount of time, not used)
 
 		//testing always_ff
-		if(count !== '0) || (flag !== 1'b0))begin
+		if((count !== '0) || (flag !== 1'b0))begin
 			$display("always_ff: Incorrect for count or flag (desired 0, is %b), begin (desired 1'b0, is %b)", count, flag);	
 		end
 
