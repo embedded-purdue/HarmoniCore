@@ -49,7 +49,7 @@ module counter_tb;
 		count_en = 1'b1;
 		
 		//when count_enable = 1, counting sequentially from 1-10
-		for (int i = 1; i < (rollover_val + 1); i++) {
+		for (int i = 1; i < (rollover_val + 1); i++) begin
 			@(posedge clk); 	//new clock edge
 
 			if (count !== i)begin
@@ -66,7 +66,7 @@ module counter_tb;
 			if ((count == rollover_val) && (flag !== 1'b1))begin
 				$display("always_comb, rollover_val: Incorrect for flag(desired 1, is %b)", flag);
 			end
-		}
+		end
 			
 	end
 endmodule
