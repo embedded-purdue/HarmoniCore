@@ -16,6 +16,7 @@ module interpolater (interpolater_if.interp intif
 
   always_comb begin
     denom_temp = (intif.prev_yin - (intif.curr_yin << 1) + intif.next_yin);
+    numer_temp = (intif.prev_yin - intif.next_yin) >> 2;
     
     if (denom_temp > ex_max)
     begin
@@ -46,6 +47,9 @@ module interpolater (interpolater_if.interp intif
     end
 
     numer_tdata = {6'b0, numer_temp[17:0]};
+
+    intif.numer = numer_tdata;
+    intif.denom = denom_tdata;
     
   end
 
