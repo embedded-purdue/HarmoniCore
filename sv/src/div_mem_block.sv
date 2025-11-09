@@ -6,7 +6,7 @@ module div_mem_block
 import types::*;
 (
     input logic clk,
-    input logic nRST,
+    input logic RST,
     input logic rollover_flag,
     input logic [DW-1:0] total,
     input logic [DW-1:0] count,
@@ -19,29 +19,29 @@ import types::*;
 
     // DETERMINE WHAT TO SEND INTO DIV
     logic divFlag;
-    always_ff @(posedge clk, negedge nRST) begin : cummeanDone
-        if (~nRST)              divFlag <= 1'b0;
+    always_ff @(posedge clk, posedge RST) begin : cummeanDone
+        if (RST)              divFlag <= 1'b0;
         else if (rollover_flag) divFlag <= 1'b1;
     end
 
     // DETERMINE BRAM READ/WRITE
     logic memFlag;
-    always_ff @(posedge clk, negedge nRST) begin : cummeanDivDone // one cycle delay indicates switch from write to read
-        if (~nRST)                         memFlag <= 1'b0;
+    always_ff @(posedge clk, posedge RST) begin : cummeanDivDone // one cycle delay indicates switch from write to read
+        if (RST)                         memFlag <= 1'b0;
         else if (divFlag && ~result_valid) memFlag <= 1'b1;
     end
 
     // WRITE STACK POINTER LOGIC
     logic [10:0] sp_w; // 11-bit write depth
-    always_ff @(posedge clk, negedge nRST) begin : spWriteLogic
-        if (~nRST)             sp_w <= '0;
+    always_ff @(posedge clk, posedge RST) begin : spWriteLogic
+        if (RST)             sp_w <= '0;
         else if (result_valid) sp_w <= sp_w + 8;
     end
 
     // READ STACK POINTER LOGIC
     logic [10:0] sp_r;
-    always_ff @(posedge clk, negedge nRST) begin : spReadLogic
-        if (~nRST)        sp_r <= '0;
+    always_ff @(posedge clk, posedge RST) begin : spReadLogic
+        if (RST)        sp_r <= '0;
         else if (memFlag) sp_r <= sp_r + 8;
     end
 
@@ -49,8 +49,8 @@ import types::*;
     logic [DW-1:0] a_in, b_in, a_out, b_out;
     logic [10:0] a_addr, b_addr;
     logic a_wr, b_wr;
-    always_ff @(posedge clk, negedge nRST) begin : cummeanStore
-        if (~nRST) begin
+    always_ff @(posedge clk, posedge RST) begin : cummeanStore
+        if (RST) begin
             a_in = '0;
             b_in = '0;
             a_wr = 1'b0;
@@ -93,8 +93,8 @@ import types::*;
     // DIV INPUT (COUNT/TOTAL or MEM)
     logic [23:0] dividend_data, divisor_data; // aligns 18 to the nearest byte
     logic dividend_valid, divisor_valid;
-    always_ff @(posedge clk, negedge nRST) begin : divInput
-        if(~nRST) begin
+    always_ff @(posedge clk, posedge RST) begin : divInput
+        if(RST) begin
             dividend_valid <= 1'b0;
             divisor_valid <= 1'b0;
             dividend_data <= '0;
@@ -126,8 +126,8 @@ import types::*;
     );
 
     // ASSIGN FINAL OUTPUT
-    always_ff @(posedge clk, negedge nRST) begin : yinvalLogic
-        if (~nRST)                        final_out <= '0;
+    always_ff @(posedge clk, posedge RST) begin : yinvalLogic
+        if (RST)                        final_out <= '0;
         else if (memFlag && result_valid) final_out <= result_data[DW-1:0];
     end
 
