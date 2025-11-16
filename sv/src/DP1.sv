@@ -7,7 +7,7 @@ module datapath_1
 (
     input logic clear,
     input logic read_en,
-    input logic [DW-1:0] data_in,
+    input logic [DWa-1:0] data_in,
     input logic clk,
     input logic rst,
 

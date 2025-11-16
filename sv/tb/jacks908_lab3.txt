@@ -1,0 +1,51 @@
+ESP32 MicroPython Assignment - Sleep/Wake Implementation
+
+ASSIGNMENT OVERVIEW:
+Create an ESP32 program that connects to WiFi, syncs time via NTP, monitors a touch sensor, 
+and implements a sleep/wake cycle with multiple wake-up sources.
+
+====================================================================================
+REQUIREMENTS:
+====================================================================================
+
+1. WiFi CONNECTION
+   - Connect to "Village West - Resident" network
+   - Password: "AstrustiaTabsExams"
+   - Display connection status and IP address
+   - Handle connection failures gracefully
+
+2. TIME SYNCHRONIZATION
+   - Fetch UTC time from NTP server (pool.ntp.org)
+   - Convert to local time (UTC-5 for EST/CDT)
+   - Display date and time every 15 seconds using a hardware timer
+
+3. TOUCH SENSOR & NEOPIXEL
+   - Monitor touch sensor on GPIO 4
+   - Threshold: 300 (originally 200)
+   - When touched: NeoPixel turns GREEN (0, 255, 0)
+   - When not touched: NeoPixel turns OFF (0, 0, 0)
+   - Check touch state every 50ms using a hardware timer
+
+4. SLEEP/WAKE CYCLE
+   - Stay awake for 30 seconds (AWAKE_MS = 30000)
+   - Sleep for 60 seconds (SLEEP_MS = 60000)
+   - Red LED on GPIO 13 indicates awake state (ON) or asleep (OFF)
+
+5. WAKE-UP SOURCES
+   Two ways to wake from deep sleep:
+   a) Timer wake - automatically after 60 seconds
+   b) External wake (EXT0) - button press on GPIO 27
+      - Button configured with PULL_DOWN
+      - Wakes on HIGH signal
+
+6. HARDWARE COMPONENTS
+   - Touch sensor: GPIO 4
+   - NeoPixel: GPIO 0
+   - NeoPixel power: GPIO 2
+   - Red LED: GPIO 13
+   - Wake button: GPIO 27
+
+
+   https://youtube.com/shorts/Eg9EGnjmmAg
+   https://youtube.com/shorts/vrAUy8EOX6Y
+   
