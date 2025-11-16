@@ -14,8 +14,8 @@ module interpolater_tb ();
     logic rst;
 
     interpolater_if intif();
-    interpolater DUT(.clk(clk), .rst(rst), .intif(intif.interp)); 
-
+    interpolater DUT(.clk(clk), .rst(rst), .intif(intif.interp));
+    
     task reset_dut();
         begin
             rst = 1'b1;

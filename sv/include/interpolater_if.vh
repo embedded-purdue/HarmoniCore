@@ -16,7 +16,7 @@ interface interpolater_if;
     logic trough_found, frame_done, divide_out_ready;
 
     modport interp (
-        input  next_yin, curr_yin, prev_yin, idx, trough_found, frame_done,
+        input  next_yin, curr_yin, prev_yin, trough_found, frame_done,
         output numer, denom, divide_out_ready
     );
 

@@ -1,2 +1,7 @@
-INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/tb/FFTwrapper_tb.sv" into library work
-INFO: [VRFC 10-311] analyzing module FFTwrapper_tb
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/include/types.sv" into library work
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/src/interpolater.sv" into library work
+INFO: [VRFC 10-311] analyzing module interpolater
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/tb/interpolater_tb.sv" into library work
+INFO: [VRFC 10-311] analyzing module interpolater_tb
+WARNING: [VRFC 10-3824] variable 'denom' must explicitly be declared as automatic or static [C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/tb/interpolater_tb.sv:32]
+WARNING: [VRFC 10-3824] variable 'numer' must explicitly be declared as automatic or static [C:/Users/Medha/OneDrive/Purdue/HarmoniCore/HarmoniCore/sv/tb/interpolater_tb.sv:33]

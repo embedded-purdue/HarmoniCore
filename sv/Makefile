@@ -44,3 +44,9 @@ sim:
 	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
 	xelab -debug typical find_trough_tb -s find_trough_tb && \
 	xsim find_trough_tb -gui -view ./waves/find_trough_sim.wcfg
+
+int:
+	xvlog -sv include/types.sv src/interpolater.sv tb/interpolater_tb.sv && \
+	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
+	xelab -debug typical interpolater_tb -s interpolater_tb && \
+	xsim interpolater_tb -gui -view ./waves/interpolater_sim.wcfg
