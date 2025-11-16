@@ -19,7 +19,8 @@ package types;
     parameter FMIN = 65.41; //C2
     parameter FMAX = 2093; //C7
     parameter MIN_PERIOD = 21;       // floor (44100 / 2093.004522404789) [SR / fmax]
-    parameter TROUGH_THRESHOLD = 10000; // should be 0.1
+    parameter TROUGH_THRESHOLD = 10000; // should be 0.1;
+    parameter DIVIDE_INPUT_W = 24;
 endpackage
 
 `endif 
