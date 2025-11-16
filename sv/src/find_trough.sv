@@ -87,16 +87,18 @@ module find_trough (
                 min_found <= 0;
             end
             else begin
+                if (trif.enable) begin
                     next_yin <= trif.yin_in;
-                    curr_yin <= next_yin;
-                    prev_yin <= curr_yin;
-                    trif.idx <= n_ind;
-                    min_yin <= n_min_yin;
-                    trough_index <= n_trough_index;
-                    trough_found <= n_trough_found;
-                    p_trough_found <= trough_found;
-                    trif.tau <= n_tau;
-                    min_found <= n_min_found;
+                end
+                curr_yin <= next_yin;
+                prev_yin <= curr_yin;
+                trif.idx <= n_ind;
+                min_yin <= n_min_yin;
+                trough_index <= n_trough_index;
+                trough_found <= n_trough_found;
+                p_trough_found <= trough_found;
+                trif.tau <= n_tau;
+                min_found <= n_min_found;
                 
             end
         end
@@ -165,9 +167,57 @@ module find_trough (
     always_comb begin : find_trough
         n_trough_index = trough_index;
         n_trough_found = trough_found;
-        if (en & (n_yin_ind > 1) & (curr_yin < prev_yin) & (curr_yin <= next_yin) & ~trough_found) begin
-            n_trough_index = curr_yin_ind;
-            n_trough_found = 1;
+        if (en & ~trough_found & (n_yin_ind > 1)) begin
+
+            /*
+
+                yin1 = pos, pos, pos, pos, neg, neg, neg, neg.
+                yin2 = pos, pos, neg, neg, pos, neg, neg, pos,
+                yin3 = pos, neg, neg, pos, pos, pos, neg, neg,
+
+                     =  1,   0,   1,   1,   0,   1,   1,   0
+            */
+            case ({prev_yin[17], curr_yin[17], next_yin[17]})   // 5 potential trough cases
+                3'b000:     begin   // all positive
+                                if ((curr_yin < prev_yin) & (curr_yin <= next_yin)) begin
+                                    n_trough_index = curr_yin_ind;
+                                    n_trough_found = 1;
+                                end
+                            end
+
+                3'b011:     begin   // pos neg neg: just need to make sure that next_yin is more negative than curr_yin
+                                if (next_yin >= curr_yin )  begin// for a 3 bit example, 100 = -4, 101 = -3. 101 > 100, so if next_yin > curr_yin, then curr_yin is smaller
+                                    n_trough_index = curr_yin_ind;
+                                    n_trough_found = 1;
+                                end
+                            end
+
+                3'b110:     begin   // neg neg pos: just need to make sure that prev_yin is bigger than curr_yin
+                                if (prev_yin > curr_yin) begin //for a 3 bit example, prev_yin = 101 = -3,  curr_yin = 100 = -4. 101 > 100, so if prev_yin > curr_yin, then curr_yin is smaller
+                                    n_trough_index = curr_yin_ind;
+                                    n_trough_found = 1;
+                                end
+                            end
+
+                3'b111:     begin   // neg neg neg
+                                //for a 3 bit example, prev_yin = 101 = -3,  curr_yin = 100 = -4, next_yin = 110 = -2. 101 > 100, so prev_yin > curr_yin, and 110 > 100, so next_yin > curr_yin
+                                if ((prev_yin > curr_yin) & (next_yin >= curr_yin)) begin
+                                    n_trough_index = curr_yin_ind;
+                                    n_trough_found = 1;
+                                end
+                            end
+                3'b010:     begin   // this is a trough.
+                                    n_trough_index = curr_yin_ind;
+                                    n_trough_found = 1;
+                            end
+                default:    begin   // no trough
+                                n_trough_index = trough_index;
+                                n_trough_found = 1'b0;
+                            end
+            endcase
+            // if ((curr_yin < prev_yin) & (curr_yin <= next_yin))
+            // n_trough_index = curr_yin_ind;
+            // n_trough_found = 1;
         end
     end
     assign trif.trough_found = trough_found & ~p_trough_found;      // register trough_found so we can send out a pulse when finding a trough
@@ -180,7 +230,7 @@ module find_trough (
     */
     always_comb begin : reset_logic
         n_delay_reset = delay_reset;
-        if (frame_done)
+        if (frame_done || trif.done_early)
             n_delay_reset = 1'b1;
         // This is used to toggle the "reset" signal
         if (delay_reset)

@@ -10,7 +10,7 @@ module interpolater (input logic clk, rst,
   logic [23:0] denom_tdata, numer_tdata, numer_reg, denom_reg;
   logic n_ready_flag, ready_flag_reg;
 
-  logic signed [DW + 1:0] ex_max, ex_min, denom_temp, numer_temp;
+  logic signed [DW + 2:0] ex_max, ex_min, denom_temp, numer_temp, denom_temp_temp;
   assign ex_max = MAX_VAL;
   assign ex_min = MIN_VAL;
 
@@ -41,21 +41,28 @@ module interpolater (input logic clk, rst,
     end
     else if (intif.trough_found) // found a trough 
     begin
-      denom_temp = (intif.prev_yin - (intif.curr_yin <<< 1) + intif.next_yin);
+      denom_temp = (intif.prev_yin - $signed({intif.curr_yin, 1'b0}) + intif.next_yin);
       numer_temp = (intif.prev_yin - intif.next_yin) >>> 1;
       
-      if (denom_temp > ex_max)
-        begin
-          denom_temp = ex_max;
+      if (denom_temp[20]) begin  // if negative number
+        if (denom_temp[17] == 0) begin  // if overflowed neg number
+          denom_temp = MIN_VAL;
         end
-      else if (denom_temp < ex_min)
-        begin
-          denom_temp = ex_min;
-        end
-      else
-        begin
-          denom_temp = denom_temp;
-        end
+      end
+      else begin  // else positive number
+        if (denom_temp > ex_max)
+          begin
+            denom_temp = ex_max;
+          end
+        else if (denom_temp < ex_min)
+          begin
+            denom_temp = ex_min;
+          end
+        else
+          begin
+            denom_temp = denom_temp;
+          end
+      end
 
       if (numer_temp > ex_max)
         begin

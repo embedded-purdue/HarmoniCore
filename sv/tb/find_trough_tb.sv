@@ -13,6 +13,7 @@ module find_trough_tb;
     always #(PERIOD/2) clk++;
 
     logic rst;
+    string curr;
 
     find_trough_if trif();
     find_trough DUT(.clk(clk), .rst(rst), .trif(trif));    
@@ -24,6 +25,7 @@ module find_trough_tb;
             trif.yin_in = 18'b0;
             // trif.count_out = 1'b0;
             trif.enable = 1'b0;
+            trif.done_early = 1'b0;
             @(posedge clk);
             @(posedge clk);
             @(negedge clk);
@@ -38,14 +40,19 @@ module find_trough_tb;
     // logic [10:0] arr[20];
         begin
             int rand_num, i;
-            // logic [10:0] arr_min;
+            logic signed [DW-1:0] fp_val;
+            real float_val;
+            
+
             @(negedge clk);
             trif.enable = 1'b1;
             for (i = 0; i < FRAME_LEN - 2028; i++) begin
                 
                 rand_num = $urandom;  // get a random number
-                $display("ind: %d lower 18 bits of rand_num (hex): %x, dec form: %d", i, rand_num[10:0], rand_num[10:0]);
-                trif.yin_in = rand_num[10:0];
+                fp_val = {rand_num[17:0]};
+                float_val = fp_val / real'(1 << DECIMALBITS);
+                $display("ind: %d lower 18 bits of rand_num (hex): %x, float form: %0f", i, fp_val, float_val);
+                trif.yin_in = fp_val;
                 // arr[i] = rand_num[10:0];
                 // trif.count_out = i[10:0];
                 // @(posedge clk);
@@ -251,9 +258,257 @@ module find_trough_tb;
         end
     endtask
 
+    task test_done_early;
+        begin
+        @(negedge clk);
+        trif.enable = 1'b1;
+        trif.yin_in = 18'h0_4000; // Start high
+        @(posedge clk);
+        
+        @(negedge clk);
+        trif.yin_in = 18'h0_5000;
+        @(posedge clk);
+
+        // trough on index 2
+        @(negedge clk);
+        trif.yin_in = 18'h3_1000;
+        @(posedge clk);
+        
+        @(negedge clk);
+        trif.yin_in = 18'h1700;
+        @(posedge clk);
+        
+        @(negedge clk);
+        trif.yin_in = 18'h7200;
+        @(posedge clk);
+        
+        @(negedge clk);
+        trif.yin_in = 18'h8300;
+        @(posedge clk);
+        
+        @(negedge clk);
+        trif.enable = 1'b0;
+        trif.done_early = 1'b1;
+        @(posedge clk);  // finish previous cycle
+        @(negedge clk);
+        trif.done_early = 1'b0;
+        @(posedge clk); // first stall cycle
+        @(posedge clk); // second stall
+        end
+    endtask
+
+// -----------------------
+// Q7.11 conversion helper
+// -----------------------
+function real q7_11_to_real (logic signed [17:0] x);
+    return x / real'(1 << 11);  // divide by 2048
+endfunction
+
+// Convenient localparams for trough-testing
+localparam logic signed [17:0] POS_HI   = 18'sd2458;   // +1.20
+localparam logic signed [17:0] POS_MID  = 18'sd1229;   // +0.60
+localparam logic signed [17:0] POS_LO   = 18'sd307;    // +0.15
+localparam logic signed [17:0] POS_TR   = 18'sd102;    // +0.05  <-- trough
+
+localparam logic signed [17:0] NEG_HI   = -18'sd2253;  // -1.10
+localparam logic signed [17:0] NEG_MID  = -18'sd1434;  // -0.70
+localparam logic signed [17:0] NEG_LO   = -18'sd410;   // -0.20
+localparam logic signed [17:0] NEG_TR   = -18'sd82;    // -0.04  <-- trough
+
+// -----------------------
+// 1. (+,+,+)
+// -----------------------
+task test_ppp;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = POS_MID;
+        $display("PPP: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_TR;
+        $display("PPP: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_HI;
+        $display("PPP: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 2. (+,+,-)
+// -----------------------
+task test_ppn;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = POS_HI;
+        $display("PPN: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_TR;
+        $display("PPN: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_MID;
+        $display("PPN: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 3. (+,-,-)
+// -----------------------
+task test_pnn;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = POS_MID;
+        $display("PNN: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_TR;
+        $display("PNN: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_LO;
+        $display("PNN: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 4. (+,-,+)
+// -----------------------
+task test_pnp;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = POS_LO;
+        $display("PNP: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_TR;
+        $display("PNP: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_MID;
+        $display("PNP: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 5. (-,+,+)
+// -----------------------
+task test_npp;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = NEG_HI;
+        $display("NPP: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_TR;
+        $display("NPP: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_MID;
+        $display("NPP: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 6. (-,-,+)
+// -----------------------
+task test_nnp;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = NEG_LO;
+        $display("NNP: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_TR;
+        $display("NNP: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_HI;
+        $display("NNP: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 7. (-,-,-)
+// -----------------------
+task test_nnn;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = NEG_MID;
+        $display("NNN: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_TR;
+        $display("NNN: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_LO;
+        $display("NNN: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
+
+// -----------------------
+// 8. (-,+,-)
+// -----------------------
+task test_npn;
+    begin
+        @(negedge clk); trif.enable = 1;
+        trif.yin_in = NEG_HI;
+        $display("NPN: yin1 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = POS_TR;
+        $display("NPN: yin2 (trough) = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.yin_in = NEG_LO;
+        $display("NPN: yin3 = %f (raw=%0d)", q7_11_to_real(trif.yin_in), trif.yin_in);
+        @(posedge clk);
+
+        @(negedge clk); trif.enable = 0;
+        trif.done_early = 1'b1;
+        @(negedge clk); trif.done_early = 1'b0;
+    end
+endtask
 
     
-    string curr;
+
     initial begin
         // $monitor("%0t min_yin: %h", $time, min_yin);
         curr = "RESET";
@@ -268,8 +523,29 @@ module find_trough_tb;
         rand_numbers_20();
         rand_numbers_20();
 
+        curr = "First min";
         test_first_min();
         test_second_last_min();
+        test_done_early();
+
+        #(PERIOD * 20);
+        test_ppp();
+        #(PERIOD * 3);
+        test_pnp();
+        #(PERIOD * 3);
+        test_ppn();
+        #(PERIOD * 3);
+        test_pnn();
+        #(PERIOD * 3);
+
+        test_nnn();
+        #(PERIOD * 3);
+        test_nnp();
+        #(PERIOD * 3);
+        test_npn();
+        #(PERIOD * 3);
+        test_npp();
+        #(PERIOD * 3);
         // #(PERIOD);
 
         // assuming that I get an enable signal and a valid yin on the same cycle

@@ -116,32 +116,49 @@ module interpolater_tb ();
         intif.frame_done = 1'b0;
         reset_dut();
         
-        test(24'd100, 24'd250, 24'd125);
+        test(18'd100, 18'd250, 18'd125);
         #(PERIOD * 5);
-        check(24'd100, 24'd250, 24'd125);
+        check(18'd100, 18'd250, 18'd125);
         #(PERIOD*2);
         frame_end();
         
-        test(24'd0, 24'h1_ffff, 24'h1_ffff);
+        test(18'd0, 18'h1_ffff, 18'h1_ffff);
         #(PERIOD * 5);
-        check(24'd0, 24'h1_ffff, 24'h1_ffff);
+        check(18'd0, 18'h1_ffff, 18'h1_ffff);
         #(PERIOD*2);
         frame_end();
         #(PERIOD * 6);
         
-        test(24'd0, 24'h2_0000, 24'h2_0000);
+        test(18'd0, 18'h2_0000, 18'h2_0000);
         #(PERIOD * 20)
-        check(24'd0, 24'h2_0000, 24'h2_0000);
+        check(18'd0, 18'h2_0000, 18'h2_0000);
         #(PERIOD*2);
         frame_end();
 
         // saturated stuff
-        test(24'd0, 24'h1_ffff, 24'h0);
+        test(18'd0, 18'h1_ffff, 18'h0);
         #(PERIOD * 5);
-        check(24'd0, 24'h1_ffff, 24'h0);
+        check(18'd0, 18'h1_ffff, 18'h0);
         #(PERIOD*2);
         frame_end();
         #(PERIOD * 6);
+
+        // +++ for denom
+        test(18'h1_FFFF, 18'h2_0000, 18'h1_FFFF);
+        #(PERIOD * 5);
+        check(18'h1_FFFF, 18'h2_0000, 18'h1_FFFF);
+        #(PERIOD*2);
+        frame_end();
+        #(PERIOD * 6);
+
+        // --- for denom
+        test(18'h2_0000, 18'h1_FFFF, 18'h2_0000);
+        #(PERIOD * 5);
+        check(18'h1_FFFF, 18'h2_0000, 18'h1_FFFF);
+        #(PERIOD*2);
+        frame_end();
+        #(PERIOD * 6);
+
         $finish;
     end
 endmodule
