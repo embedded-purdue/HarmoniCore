@@ -50,3 +50,9 @@ int:
 	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
 	xelab -debug typical interpolater_tb -s interpolater_tb && \
 	xsim interpolater_tb -gui -view ./waves/interpolater_sim.wcfg
+
+top:
+	xvlog -sv include/types.sv src/top.sv tb/top_tb.sv && \
+	xvhdl ./HarmoniCore.gen/sources_1/ip/fft_core/sim/fft_core.vhd
+	xelab -debug typical top_tb -s top_tb && \
+	xsim top_tb -gui -view ./waves/top_sim.wcfg
