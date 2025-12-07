@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0 ps"></ZoomStartTime>
-      <ZoomEndTime time="10 ps"></ZoomEndTime>
-      <Cursor1Time time="0 ps"></Cursor1Time>
+      <ZoomStartTime time="8,543.967 ns"></ZoomStartTime>
+      <ZoomEndTime time="8,711.368 ns"></ZoomEndTime>
+      <Cursor1Time time="8,345.800 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="340"></NameColumnWidth>
-      <ValueColumnWidth column_width="147"></ValueColumnWidth>
+      <ValueColumnWidth column_width="99"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="17" />
+   <WVObjectSize size="40" />
    <wvobject type="divider" fp_name="divider29">
       <obj_property name="label">Inputs</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -28,9 +28,9 @@
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/cmnd_tb/nRST" type="logic">
-      <obj_property name="ElementShortName">nRST</obj_property>
-      <obj_property name="ObjectShortName">nRST</obj_property>
+   <wvobject fp_name="/cmnd_tb/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
    </wvobject>
    <wvobject fp_name="/cmnd_tb/cmndif/diff_in" type="array">
       <obj_property name="ElementShortName">diff_in[17:0]</obj_property>
@@ -40,144 +40,144 @@
       <obj_property name="ElementShortName">diff_valid</obj_property>
       <obj_property name="ObjectShortName">diff_valid</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider31">
-      <obj_property name="label">Outputs</obj_property>
+   <wvobject type="divider" fp_name="divider52">
+      <obj_property name="label">Cummean + Yin</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/cmnd_tb/cmndif/yin_val" type="array">
-      <obj_property name="ElementShortName">yin_val[17:0]</obj_property>
-      <obj_property name="ObjectShortName">yin_val[17:0]</obj_property>
+   <wvobject fp_name="/cmnd_tb/DUT/rollover_flag" type="logic">
+      <obj_property name="ElementShortName">rollover_flag</obj_property>
+      <obj_property name="ObjectShortName">rollover_flag</obj_property>
    </wvobject>
-   <wvobject fp_name="group34" type="group">
-      <obj_property name="label">Cumsum</obj_property>
+   <wvobject fp_name="/cmnd_tb/DUT/total" type="array">
+      <obj_property name="ElementShortName">total[17:0]</obj_property>
+      <obj_property name="ObjectShortName">total[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/count" type="array">
+      <obj_property name="ElementShortName">count[17:0]</obj_property>
+      <obj_property name="ObjectShortName">count[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/delayed_diff" type="array">
+      <obj_property name="ElementShortName">delayed_diff[17:0]</obj_property>
+      <obj_property name="ObjectShortName">delayed_diff[17:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider71">
+      <obj_property name="label">Divblock</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/cmnd_tb/cmndif/diff_in" type="array">
-         <obj_property name="ElementShortName">diff_in[17:0]</obj_property>
-         <obj_property name="ObjectShortName">diff_in[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/total" type="array">
-         <obj_property name="ElementShortName">total[17:0]</obj_property>
-         <obj_property name="ObjectShortName">total[17:0]</obj_property>
-      </wvobject>
    </wvobject>
-   <wvobject fp_name="group36" type="group">
-      <obj_property name="label">Counter</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/cmnd_tb/cmndif/diff_valid" type="logic">
-         <obj_property name="ElementShortName">diff_valid</obj_property>
-         <obj_property name="ObjectShortName">diff_valid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/count" type="array">
-         <obj_property name="ElementShortName">count[17:0]</obj_property>
-         <obj_property name="ObjectShortName">count[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/rollover_flag" type="logic">
-         <obj_property name="ElementShortName">rollover_flag</obj_property>
-         <obj_property name="ObjectShortName">rollover_flag</obj_property>
-      </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/state" type="array">
+      <obj_property name="ElementShortName">state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">state[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="group38" type="group">
-      <obj_property name="label">Shift</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/cmnd_tb/cmndif/diff_in" type="array">
-         <obj_property name="ElementShortName">diff_in[17:0]</obj_property>
-         <obj_property name="ObjectShortName">diff_in[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/delayed_diff" type="array">
-         <obj_property name="ElementShortName">delayed_diff[17:0]</obj_property>
-         <obj_property name="ObjectShortName">delayed_diff[17:0]</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="group41" type="group">
-      <obj_property name="label">Block Mem</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/b_out" type="array">
-         <obj_property name="ElementShortName">b_out[17:0]</obj_property>
-         <obj_property name="ObjectShortName">b_out[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/b_in" type="array">
-         <obj_property name="ElementShortName">b_in[17:0]</obj_property>
-         <obj_property name="ObjectShortName">b_in[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/b_addr" type="array">
-         <obj_property name="ElementShortName">b_addr[10:0]</obj_property>
-         <obj_property name="ObjectShortName">b_addr[10:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/b_wr" type="logic">
-         <obj_property name="ElementShortName">b_wr</obj_property>
-         <obj_property name="ObjectShortName">b_wr</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/a_out" type="array">
-         <obj_property name="ElementShortName">a_out[17:0]</obj_property>
-         <obj_property name="ObjectShortName">a_out[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/a_in" type="array">
-         <obj_property name="ElementShortName">a_in[17:0]</obj_property>
-         <obj_property name="ObjectShortName">a_in[17:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/a_addr" type="array">
-         <obj_property name="ElementShortName">a_addr[10:0]</obj_property>
-         <obj_property name="ObjectShortName">a_addr[10:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/a_wr" type="logic">
-         <obj_property name="ElementShortName">a_wr</obj_property>
-         <obj_property name="ObjectShortName">a_wr</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/clk" type="logic">
-         <obj_property name="ElementShortName">clk</obj_property>
-         <obj_property name="ObjectShortName">clk</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="group39" type="group">
-      <obj_property name="label">Divider</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/aclk" type="logic">
-         <obj_property name="ElementShortName">aclk</obj_property>
-         <obj_property name="ObjectShortName">aclk</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/dividend_data" type="array">
-         <obj_property name="ElementShortName">dividend_data[23:0]</obj_property>
-         <obj_property name="ObjectShortName">dividend_data[23:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/dividend_valid" type="logic">
-         <obj_property name="ElementShortName">dividend_valid</obj_property>
-         <obj_property name="ObjectShortName">dividend_valid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/divisor_data" type="array">
-         <obj_property name="ElementShortName">divisor_data[23:0]</obj_property>
-         <obj_property name="ObjectShortName">divisor_data[23:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/divisor_valid" type="logic">
-         <obj_property name="ElementShortName">divisor_valid</obj_property>
-         <obj_property name="ObjectShortName">divisor_valid</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/result_data" type="array">
-         <obj_property name="ElementShortName">result_data[23:0]</obj_property>
-         <obj_property name="ObjectShortName">result_data[23:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/result_valid" type="logic">
-         <obj_property name="ElementShortName">result_valid</obj_property>
-         <obj_property name="ObjectShortName">result_valid</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/final_out" type="array">
-      <obj_property name="ElementShortName">final_out[17:0]</obj_property>
-      <obj_property name="ObjectShortName">final_out[17:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/divFlag" type="logic">
-      <obj_property name="ElementShortName">divFlag</obj_property>
-      <obj_property name="ObjectShortName">divFlag</obj_property>
-   </wvobject>
-   <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/memFlag" type="logic">
-      <obj_property name="ElementShortName">memFlag</obj_property>
-      <obj_property name="ObjectShortName">memFlag</obj_property>
-   </wvobject>
-   <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/sp_w" type="array">
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/sp_w" type="array">
       <obj_property name="ElementShortName">sp_w[10:0]</obj_property>
       <obj_property name="ObjectShortName">sp_w[10:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/cmnd_tb/DUT/div_mem_inst/sp_r" type="array">
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/sp_r" type="array">
       <obj_property name="ElementShortName">sp_r[10:0]</obj_property>
       <obj_property name="ObjectShortName">sp_r[10:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider38">
+      <obj_property name="label">Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/divif/dividend_data" type="array">
+      <obj_property name="ElementShortName">dividend_data[17:0]</obj_property>
+      <obj_property name="ObjectShortName">dividend_data[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/divif/divisor_data" type="array">
+      <obj_property name="ElementShortName">divisor_data[17:0]</obj_property>
+      <obj_property name="ObjectShortName">divisor_data[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/divif/out_data" type="array">
+      <obj_property name="ElementShortName">out_data[17:0]</obj_property>
+      <obj_property name="ObjectShortName">out_data[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/divif/out_valid" type="logic">
+      <obj_property name="ElementShortName">out_valid</obj_property>
+      <obj_property name="ObjectShortName">out_valid</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider39">
+      <obj_property name="label">Mem</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/dina" type="array">
+      <obj_property name="ElementShortName">dina[17:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/dinb" type="array">
+      <obj_property name="ElementShortName">dinb[17:0]</obj_property>
+      <obj_property name="ObjectShortName">dinb[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/douta" type="array">
+      <obj_property name="ElementShortName">douta[17:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/doutb" type="array">
+      <obj_property name="ElementShortName">doutb[17:0]</obj_property>
+      <obj_property name="ObjectShortName">doutb[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/valid_a" type="logic">
+      <obj_property name="ElementShortName">valid_a</obj_property>
+      <obj_property name="ObjectShortName">valid_a</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/valid_b" type="logic">
+      <obj_property name="ElementShortName">valid_b</obj_property>
+      <obj_property name="ObjectShortName">valid_b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/wea" type="logic">
+      <obj_property name="ElementShortName">wea</obj_property>
+      <obj_property name="ObjectShortName">wea</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/memif/web" type="logic">
+      <obj_property name="ElementShortName">web</obj_property>
+      <obj_property name="ObjectShortName">web</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider31">
+      <obj_property name="label">Yin Outputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/yin_valid" type="logic">
+      <obj_property name="ElementShortName">yin_valid</obj_property>
+      <obj_property name="ObjectShortName">yin_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/yin_out" type="array">
+      <obj_property name="ElementShortName">yin_out[17:0]</obj_property>
+      <obj_property name="ObjectShortName">yin_out[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/DUT/divblock_inst/pipeline" type="array">
+      <obj_property name="ElementShortName">pipeline[5:0]</obj_property>
+      <obj_property name="ObjectShortName">pipeline[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider51">
+      <obj_property name="label">Yin Inputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/interp_valid" type="logic">
+      <obj_property name="ElementShortName">interp_valid</obj_property>
+      <obj_property name="ObjectShortName">interp_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/interp_dividend" type="array">
+      <obj_property name="ElementShortName">interp_dividend[17:0]</obj_property>
+      <obj_property name="ObjectShortName">interp_dividend[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/interp_divisor" type="array">
+      <obj_property name="ElementShortName">interp_divisor[17:0]</obj_property>
+      <obj_property name="ObjectShortName">interp_divisor[17:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/interp_tau" type="array">
+      <obj_property name="ElementShortName">interp_tau[17:0]</obj_property>
+      <obj_property name="ObjectShortName">interp_tau[17:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider50">
+      <obj_property name="label">PSOLA Outputs</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/psola_valid" type="logic">
+      <obj_property name="ElementShortName">psola_valid</obj_property>
+      <obj_property name="ObjectShortName">psola_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cmnd_tb/cmndif/psola_out" type="array">
+      <obj_property name="ElementShortName">psola_out[17:0]</obj_property>
+      <obj_property name="ObjectShortName">psola_out[17:0]</obj_property>
    </wvobject>
 </wave_config>

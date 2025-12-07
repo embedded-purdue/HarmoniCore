@@ -30,19 +30,18 @@ set div [create_ip -name div_gen -vendor xilinx.com -library ip -version 5.1 -mo
 # User Parameters
 set_property -dict [list \
   CONFIG.ARESETN {true} \
-  CONFIG.dividend_and_quotient_width {18} \
+  CONFIG.dividend_and_quotient_width {29} \
   CONFIG.divisor_width {18} \
-  CONFIG.fractional_width {11} \
+  CONFIG.fractional_width {18} \
   CONFIG.latency {33} \
-  CONFIG.remainder_type {Fractional} \
 ] [get_ips div]
 
 # Runtime Parameters
 set_property -dict { 
   GENERATE_SYNTH_CHECKPOINT {1}
 } $div
-generate_target all [get_ips div]
 
+generate_target all [get_ips div]
 ##################################################################
 
 ##################################################################
@@ -55,7 +54,7 @@ set blk_mem [create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version
 set_property -dict [list \
   CONFIG.Assume_Synchronous_Clk {true} \
   CONFIG.Memory_Type {True_Dual_Port_RAM} \
-  CONFIG.Write_Depth_A {12} \
+  CONFIG.Write_Depth_A {2048} \
   CONFIG.Write_Width_A {18} \
 ] [get_ips blk_mem]
 
@@ -63,8 +62,8 @@ set_property -dict [list \
 set_property -dict { 
   GENERATE_SYNTH_CHECKPOINT {1}
 } $blk_mem
-generate_target all [get_ips blk_mem]
 
+generate_target all [get_ips blk_mem]
 ##################################################################
 
 ##################################################################
@@ -75,7 +74,8 @@ set shift_reg [create_ip -name c_shift_ram -vendor xilinx.com -library ip -versi
 
 # User Parameters
 set_property -dict [list \
-  CONFIG.Depth {24} \
+  CONFIG.Depth {33} \
+  CONFIG.SCLR {true} \
   CONFIG.Width {18} \
 ] [get_ips shift_reg]
 
@@ -83,8 +83,8 @@ set_property -dict [list \
 set_property -dict { 
   GENERATE_SYNTH_CHECKPOINT {1}
 } $shift_reg
-generate_target all [get_ips shift_reg]
 
+generate_target all [get_ips shift_reg]
 ##################################################################
 
 add_files constraints.xdc

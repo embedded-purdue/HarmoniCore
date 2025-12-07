@@ -39,14 +39,6 @@ program test (
             divif.divisor_valid  = 1'b1;
             divif.divisor_data   = divisor_in;
             @(negedge clk);
-
-            // $display("=================================");
-            // assert (expOut == divif.out_data) $display ("Correct output value");
-            //     else $display ("Incorrect output value ERROR");
-            // assert (expValid == divif.out_valid) $display ("Correct output valid value");
-            //     else $display ("Incorrect output valid value ERROR");
-            // $display("");
-
         end
     endtask
 
@@ -74,28 +66,38 @@ program test (
         sendDiv(18'h3100, 18'h1100); // 7 / 3 = 2.3333
         sendDiv(18'h1C000, 18'hF00); // 56 / 1.875 = 29.8666
         sendDiv(18'h20800, 18'h01333); // -63 / 2.4 = -26.25
-
+        
+        divif.dividend_valid = 1'b0;
+        divif.divisor_valid  = 1'b0;
         repeat (24) @(negedge clk);
         $display("=================================");
         assert (divif.out_data == 18'h2000) $display ("Correct output value"); // 5 / 1.25 = 4
             else $display ("Incorrect output value ERROR");
+        @(negedge clk);
         assert (divif.out_data == 18'h1000) $display ("Correct output value"); // 1 / 0.5 = 2
             else $display ("Incorrect output value ERROR");
+        @(negedge clk);
         assert (divif.out_data == 18'h800) $display ("Correct output value"); // 2 / 2 = 1
             else $display ("Incorrect output value ERROR");
-        assert (divif.out_data == 18'h100) $display ("Correct output value"); // 0.5 / 2 = 0.25
+        @(negedge clk);
+        assert (divif.out_data == 18'h200) $display ("Correct output value"); // 0.5 / 2 = 0.25
             else $display ("Incorrect output value ERROR");
+        @(negedge clk);
 
-        assert (divif.out_data == 18'h3FE) $display ("Correct output value"); // 0.5 / -2 = -0.25
+        assert (divif.out_data == 18'h3FE00) $display ("Correct output value"); // 0.5 / -2 = -0.25
             else $display ("Incorrect output value ERROR");
-        assert (divif.out_data == 18'h3FE) $display ("Correct output value"); // -0.5 / 2 = -0.25
+        @(negedge clk);
+        assert (divif.out_data == 18'h3FE00) $display ("Correct output value"); // -0.5 / 2 = -0.25
             else $display ("Incorrect output value ERROR");
-        assert (divif.out_data == 18'h013AA) $display ("Correct output value"); // 7 / 3 = 2.3333
-            else $display ("Incorrect output value ERROR");
-        assert (divif.out_data == 18'h0EEEE) $display ("Correct output value"); // 56 / 1.875 = 29.8666
-            else $display ("Incorrect output value ERROR");
-        assert (divif.out_data == 18'h22E00) $display ("Correct output value"); // -63 / 2.4 = -26.25
-            else $display ("Incorrect output value ERROR");
+        @(negedge clk);
+        assert (divif.out_data == 18'h012AA) $display ("Correct output value (output repeating)"); // 7 / 3 = 2.3333
+            else $display ("Incorrect output value (output repeating) ERROR");
+        @(negedge clk);
+        assert (divif.out_data == 18'h0EEEE) $display ("Correct output value (output repeating)"); // 56 / 1.875 = 29.8666
+            else $display ("Incorrect output value (output repeating) ERROR");
+        @(negedge clk);
+        assert (divif.out_data == 18'h32E00) $display ("Correct output value (input repeating)"); // -63 / 2.4 = -26.25
+            else $display ("Incorrect output value (input repeating) ERROR");
         $display("");
 
         repeat (15) @(negedge clk);

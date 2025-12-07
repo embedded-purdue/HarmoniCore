@@ -11,7 +11,6 @@ module counter_tb;
 
 	logic clk = 0;
 	logic rst; //reset held low, synchronous ACTIVE HIGH SYNCHRNOUS, RESET not nreset
-	logic clear;
 	logic count_en;
 	logic [3:0] rollover_val;
 	logic [3:0] count;
@@ -24,7 +23,6 @@ module counter_tb;
 
 	initial begin
 		rst = 1'b0;
-		clear = 1'b1;
 		count_en = 1'b0;
 		rollover_val = 10;
 		
@@ -40,13 +38,6 @@ module counter_tb;
         rst = 1'b0;
 		@(posedge clk); 	//new clock edge
 		
-		//testing always_comb 
-		//when clear = 1
-		if(count !== '0)begin
-			$display("always_comb, clear: Incorrect for count(desired 0, is %b)", count);
-		end
-
-		clear = 1'b0;
 		count_en = 1'b1;
 		
 		//when count_enable = 1, counting sequentially from 1-10

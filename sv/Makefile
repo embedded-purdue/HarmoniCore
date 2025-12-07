@@ -3,13 +3,22 @@ setup:
 	vivado -mode batch -source create_project.tcl
 clean:
 	@echo Cleaning Vivado project files...
-	@cmd /C "del /Q *.wdb *.jou *.log *.pb *.str >nul 2>&1"
-	@cmd /C "rmdir /S /Q .Xil >nul 2>&1"
-	@cmd /C "rmdir /S /Q xsim.dir >nul 2>&1"
-	@cmd /C "rmdir /S /Q .runs >nul 2>&1"
-	@cmd /C "rmdir /S /Q .cache >nul 2>&1"
-	@cmd /C "rmdir /S /Q .sim >nul 2>&1"
-	@cmd /C "for /D %%G in (vivado_pid*) do rmdir /S /Q %%G >nul 2>&1"
+	-@cmd /C "del /Q *.wdb *.jou *.log *.pb *.str *.xci >nul 2>&1"
+	-@cmd /C "rmdir /S /Q .Xil >nul 2>&1"
+	-@cmd /C "rmdir /S /Q xsim.dir >nul 2>&1"
+	-@cmd /C "rmdir /S /Q .runs >nul 2>&1"
+	-@cmd /C "rmdir /S /Q .cache >nul 2>&1"
+	-@cmd /C "rmdir /S /Q .sim >nul 2>&1"
+	-@cmd /C "for /D %%G in (vivado_pid*) do rmdir /S /Q %%G >nul 2>&1"
+
+	@echo Removing Vivado IP cores...
+	-@cmd /C "rmdir /S /Q project.srcs\\sources_1\\ip >nul 2>&1"
+	-@cmd /C "rmdir /S /Q project.srcs\\sources_1\\ipshared >nul 2>&1"
+	-@cmd /C "rmdir /S /Q ip_user_files\\ip >nul 2>&1"
+	-@cmd /C "rmdir /S /Q ip_user_files\\sim_scripts >nul 2>&1"
+	-@cmd /C "del /Q project.srcs\\sources_1\\bd\\*\\*.xci >nul 2>&1"
+	-@cmd /C "del /Q project.srcs\\sources_1\\ip\\*.xci >nul 2>&1"
+
 	@echo Clean complete.
 %.sim:
 	for %%f in (src\*.sv) do xvlog -sv %%f
